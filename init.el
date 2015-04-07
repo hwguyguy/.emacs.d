@@ -106,7 +106,8 @@
         php-mode
         web-mode
         scss-mode
-        apache-mode))
+        apache-mode
+        yaml-mode))
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
                          ("melpa" . "http://melpa.org/packages/")
@@ -126,6 +127,7 @@
 
 (require 'helm-config)
 (setq helm-M-x-fuzzy-match t
+      helm-buffers-fuzzy-matching t
       helm-imenu-fuzzy-match t)
 (helm-mode 1)
 
@@ -258,6 +260,9 @@
 (add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
 (add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
 (add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)

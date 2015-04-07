@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: php_process_tag
+# key: ?
+# --
+<?php $0 ?>
