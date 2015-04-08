@@ -25,6 +25,7 @@
 (setq inhibit-startup-message t
       initial-scratch-message nil
       ;confirm-kill-emacs 'y-or-n-p
+      frame-title-format "%f - Emacs"
       echo-keystrokes 0.1
       backward-delete-char-untabify-method nil
       mouse-wheel-progressive-speed nil
@@ -83,6 +84,7 @@
   (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
   (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent))
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'electric-pair-mode)
 (add-hook 'emacs-lisp-mode-hook 'electric-indent-mode)
 
@@ -94,24 +96,27 @@
         ace-jump-mode
         auto-complete
         yasnippet
+        emmet-mode
         multi-term
         flycheck
         bookmark+
         projectile
         helm-projectile
         fiplr
+        rainbow-mode
         org
+        clojure-mode
         js2-mode
-        emmet-mode
         php-mode
         web-mode
         scss-mode
         apache-mode
         yaml-mode))
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+                         ;; ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
                          ("melpa" . "http://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
+(setq package-enable-at-startup nil)
 (package-initialize)
 (or (file-exists-p package-user-dir)
     (package-refresh-contents))
@@ -169,6 +174,18 @@
 (add-hook 'snippet-mode-hook 'my-snippet-mode-config)
 (add-hook 'snippet-mode-hook 'whitespace-mode)
 
+(require 'emmet-mode)
+(let ((tbl (gethash "aliases" (gethash "html" emmet-snippets))))
+  (puthash "js" "script[type=text/javascript]" tbl)
+  (puthash "js:src" "script[type=text/javascript src]" tbl))
+(let ((tbl (gethash "snippets" (gethash "html" emmet-snippets))))
+  (puthash "fe" "<?php foreach (${child} as ): ?>" tbl)
+  (puthash "ef" "<?php endforeach; ?>" tbl)
+  (puthash "if" "<?php if (${child}): ?>" tbl)
+  (puthash "elf" "<?php elseif (${child}): ?>" tbl)
+  (puthash "el" "<?php else: ?>" tbl)
+  (puthash "fi" "<?php endif; ?>" tbl))
+
 (unless (eq system-type 'windows-nt)
   (require 'multi-term)
   (setq multi-term-program "/bin/bash"))
@@ -177,6 +194,7 @@
 
 (setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
 (require 'bookmark+)
+(setq bmkp-last-as-first-bookmark-file (concat user-emacs-directory "bookmarks"))
 
 (require 'projectile)
 (require 'helm-projectile)
@@ -185,10 +203,20 @@
 
 (require 'fiplr)
 
+(require 'rainbow-mode)
+
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
       org-startup-folded 'showeverything)
 (add-hook 'org-mode-hook 'auto-complete-mode)
+(add-hook 'org-mode-hook 'rainbow-mode)
+
+(require 'clojure-mode)
+(defun my-clojure-mode-config()
+  (setq indent-tabs-mode nil))
+(add-hook 'clojure-mode-hook 'my-clojure-mode-config)
+(add-hook 'clojure-mode-hook 'electric-pair-mode)
+(add-hook 'clojure-mode-hook 'electric-indent-mode)
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -200,19 +228,15 @@
 (add-hook 'js2-mode-hook 'electric-pair-mode)
 (add-hook 'js2-mode-hook 'electric-indent-mode)
 
-(require 'emmet-mode)
-(let ((tbl (gethash "aliases" (gethash "html" emmet-snippets))))
-  (puthash "js" "script[type=text/javascript]" tbl)
-  (puthash "js:src" "script[type=text/javascript src]" tbl))
-(let ((tbl (gethash "snippets" (gethash "html" emmet-snippets))))
-  (puthash "fe" "<?php foreach (${child} as ): ?>" tbl)
-  (puthash "ef" "<?php endforeach; ?>" tbl)
-  (puthash "if" "<?php if (${child}): ?>" tbl)
-  (puthash "fi" "<?php endif; ?>" tbl))
-
 (require 'php-mode)
+(c-add-style
+ "hwguyguy-php"
+ '("php"
+   (c-basic-offset . 4)
+   (c-offsets-alist . ((statement-cont . (first php-lineup-cascaded-calls +))))))
 (defun my-php-mode-config()
-  (setq indent-tabs-mode t))
+  (setq indent-tabs-mode t)
+  (c-set-style "hwguyguy-php"))
 (add-hook 'php-mode-hook 'my-php-mode-config)
 (add-hook 'php-mode-hook 'electric-pair-mode)
 (add-hook 'php-mode-hook 'electric-indent-mode)
@@ -242,18 +266,21 @@
 (add-hook 'web-mode-hook 'electric-pair-mode)
 (add-hook 'web-mode-hook 'auto-complete-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'rainbow-mode)
 
 (defun my-css-mode-config()
   (setq tab-width 4))
 (add-hook 'css-mode-hook 'my-css-mode-config)
 (add-hook 'css-mode-hook 'emmet-mode)
-(add-hook 'scss-mode-hook 'electric-pair-mode)
+(add-hook 'css-mode-hook 'electric-pair-mode)
+(add-hook 'css-mode-hook 'rainbow-mode)
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (setq scss-compile-at-save nil)
 (add-hook 'scss-mode-hook 'electric-pair-mode)
 (add-hook 'scss-mode-hook 'electric-indent-mode)
 (add-hook 'scss-mode-hook 'emmet-mode)
+(add-hook 'scss-mode-hook 'rainbow-mode)
 
 (add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
 (add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
@@ -274,6 +301,13 @@
 (global-set-key (kbd "M-s") 'ace-jump-char-mode)
 (global-set-key (kbd "C-c C-k") 'ace-jump-word-mode)
 (global-set-key (kbd "C-c C-l") 'ace-jump-line-mode)
+
+(define-key ibuffer-mode-map (kbd "j") 'ibuffer-forward-line)
+(define-key ibuffer-mode-map (kbd "k") 'ibuffer-backward-line)
+(define-key ibuffer-mode-map (kbd "J") 'ibuffer-jump-to-buffer)
+(define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
+
+(define-key helm-find-files-map (kbd "<RET>") 'helm-execute-persistent-action)
 
 (define-key evil-normal-state-map [f7] 'split-window-horizontally)
 (define-key evil-normal-state-map [f8] 'split-window-vertically)
