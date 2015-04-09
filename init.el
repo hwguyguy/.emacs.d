@@ -27,6 +27,7 @@
       ;confirm-kill-emacs 'y-or-n-p
       frame-title-format "%f - Emacs"
       echo-keystrokes 0.1
+      require-final-newline t
       backward-delete-char-untabify-method nil
       mouse-wheel-progressive-speed nil
       focus-follows-mouse t
@@ -34,6 +35,17 @@
       scroll-step 1
       scroll-conservatively 10000
       auto-window-vscroll nil)
+
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'super
+        mac-command-modifier 'meta
+        ns-pop-up-frames nil))
+
+(defun my-align-by-space (orig-fun &rest args)
+  (let ((indent-tabs-mode nil))
+    (apply orig-fun args)))
+(advice-add 'align :around 'my-align-by-space)
+(advice-add 'align-regexp :around 'my-align-by-space)
 
 (defun font-candidate (&rest fonts)
   "Return existing font which first match."
