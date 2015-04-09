@@ -79,6 +79,12 @@
 ;;         (write-region (point-min) (point-max) new-filename nil nil nil nil)))))
 ;; (add-hook 'after-save-hook 'my-winscp-backup)
 
+(defun my-helm-find-files-expand-directory-or-open-file()
+  (interactive)
+  (if (file-directory-p (helm-get-selection))
+      (helm-execute-persistent-action)
+    (helm-maybe-exit-minibuffer)))
+
 (defun my-emacs-lisp-mode-config()
   (setq indent-tabs-mode nil)
   (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
@@ -307,7 +313,7 @@
 (define-key ibuffer-mode-map (kbd "J") 'ibuffer-jump-to-buffer)
 (define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
 
-(define-key helm-find-files-map (kbd "<RET>") 'helm-execute-persistent-action)
+(define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
 
 (define-key evil-normal-state-map [f7] 'split-window-horizontally)
 (define-key evil-normal-state-map [f8] 'split-window-vertically)
