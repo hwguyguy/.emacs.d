@@ -97,14 +97,43 @@
       (helm-execute-persistent-action)
     (helm-maybe-exit-minibuffer)))
 
-(defun my-emacs-lisp-mode-config()
-  (setq indent-tabs-mode nil)
-  (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
-  (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent))
-(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'electric-pair-mode)
-(add-hook 'emacs-lisp-mode-hook 'electric-indent-mode)
+(defun my-c-indent-new-comment-line()
+  "Add new comment line and auto close block comment."
+  (interactive)
+  (let (star single col first-line needs-close)
+    (save-excursion
+      (back-to-indentation)
+      (cond
+       ((looking-at "\\*[^/]")
+        (setq star t
+              col (current-column)))
+       ((looking-at "/\\*")
+        (setq star t
+              first-line t
+              col (1+ (current-column))))
+       ((looking-at "//")
+        (setq single t
+              col (current-column)))))
+    (setq needs-close
+          (and first-line
+               (eolp)
+               (save-excursion
+                 (skip-chars-forward " \t\r\n")
+                 (not (eq (char-after) ?*)))))
+    (delete-horizontal-space)
+    (insert "\n")
+    (cond
+     (star
+      (indent-to col)
+      (insert "* ")
+      (if (and first-line needs-close)
+          (save-excursion
+            (insert "\n")
+            (indent-to col)
+            (insert "*/"))))
+     (single
+      (indent-to col)
+      (insert "// ")))))
 
 (require 'package)
 (setq package-list
@@ -112,6 +141,7 @@
         evil-numbers
         helm
         ace-jump-mode
+        paredit
         auto-complete
         yasnippet
         emmet-mode
@@ -155,6 +185,8 @@
 (helm-mode 1)
 
 (require 'ace-jump-mode)
+
+(require 'paredit)
 
 (require 'auto-complete-config)
 (ac-config-default)
@@ -212,7 +244,8 @@
 
 (setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
 (require 'bookmark+)
-(setq bmkp-last-as-first-bookmark-file (concat user-emacs-directory "bookmarks"))
+(setq bmkp-last-as-first-bookmark-file nil
+      bmkp-bmenu-state-file (concat user-emacs-directory ".emacs-bmk-bmenu-state.el"))
 
 (require 'projectile)
 (require 'helm-projectile)
@@ -223,17 +256,29 @@
 
 (require 'rainbow-mode)
 
+(defun my-emacs-lisp-mode-config()
+  (setq indent-tabs-mode nil)
+  (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
+  (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent))
+(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'electric-indent-mode)
+
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
       org-startup-folded 'showeverything)
 (add-hook 'org-mode-hook 'auto-complete-mode)
 (add-hook 'org-mode-hook 'rainbow-mode)
 
+(require 'cc-mode)
+(define-key c-mode-base-map (kbd "M-j") 'my-c-indent-new-comment-line)
+
 (require 'clojure-mode)
 (defun my-clojure-mode-config()
   (setq indent-tabs-mode nil))
 (add-hook 'clojure-mode-hook 'my-clojure-mode-config)
-(add-hook 'clojure-mode-hook 'electric-pair-mode)
+(add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'clojure-mode-hook 'electric-indent-mode)
 
 (require 'js2-mode)
@@ -309,6 +354,13 @@
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
+(require 'ibuffer)
+(define-key ibuffer-mode-map (kbd "j") 'ibuffer-forward-line)
+(define-key ibuffer-mode-map (kbd "k") 'ibuffer-backward-line)
+(define-key ibuffer-mode-map (kbd "J") 'ibuffer-jump-to-buffer)
+(define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
+(add-hook 'ibuffer-mode-hook 'hl-line-mode)
+
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -319,11 +371,6 @@
 (global-set-key (kbd "M-s") 'ace-jump-char-mode)
 (global-set-key (kbd "C-c C-k") 'ace-jump-word-mode)
 (global-set-key (kbd "C-c C-l") 'ace-jump-line-mode)
-
-(define-key ibuffer-mode-map (kbd "j") 'ibuffer-forward-line)
-(define-key ibuffer-mode-map (kbd "k") 'ibuffer-backward-line)
-(define-key ibuffer-mode-map (kbd "J") 'ibuffer-jump-to-buffer)
-(define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
 
 (define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
 
@@ -343,6 +390,8 @@
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-s") 'evil-numbers/dec-at-pt)
 
+(define-key evil-visual-state-map (kbd "M-w") 'ace-jump-word-mode)
+
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
@@ -351,6 +400,7 @@
 (define-key evil-insert-state-map (kbd "M-h") 'backward-kill-word)
 (define-key evil-insert-state-map (kbd "C-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "C-p") 'ac-start)
+(define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 
 (let ((override (concat user-emacs-directory "my-init/override.el")))
   (when (file-exists-p override)
