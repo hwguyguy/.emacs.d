@@ -140,6 +140,7 @@
       '(evil
         evil-numbers
         helm
+        key-chord
         ace-jump-mode
         paredit
         auto-complete
@@ -174,6 +175,7 @@
 
 (require 'evil)
 (setq-default evil-symbol-word-search t)
+(delete 'help-mode evil-motion-state-modes)
 (evil-mode 1)
 
 (require 'evil-numbers)
@@ -184,11 +186,15 @@
       helm-imenu-fuzzy-match t)
 (helm-mode 1)
 
+(require 'key-chord)
+(setq key-chord-two-keys-delay 0.5)
+
 (require 'ace-jump-mode)
 
 (require 'paredit)
 
 (require 'auto-complete-config)
+(defun ac-expand-common ())
 (ac-config-default)
 (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
 (define-key ac-completing-map "\t" 'ac-complete)
@@ -300,10 +306,20 @@
 (defun my-php-mode-config()
   (setq indent-tabs-mode t)
   (c-set-style "hwguyguy-php"))
+(defun my-php-object-operator-shortcut ()
+  "Insert an object operator."
+  (interactive)
+  (insert "->"))
+(defun my-php-double-arrow-operator-shortcut ()
+  "Insert a double arrow operator."
+  (interactive)
+  (insert "=>"))
+(key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
 (add-hook 'php-mode-hook 'my-php-mode-config)
 (add-hook 'php-mode-hook 'electric-pair-mode)
 (add-hook 'php-mode-hook 'electric-indent-mode)
 (add-hook 'php-mode-hook 'flycheck-mode)
+(add-hook 'php-mode-hook 'key-chord-mode)
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
