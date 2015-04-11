@@ -173,7 +173,11 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(require 'whitespace)
+(delete 'lines whitespace-style)
+
 (require 'evil)
+(evil-set-toggle-key "C-x C-z")
 (setq-default evil-symbol-word-search t)
 (delete 'help-mode evil-motion-state-modes)
 (evil-mode 1)
@@ -188,6 +192,7 @@
 
 (require 'key-chord)
 (setq key-chord-two-keys-delay 0.5)
+(key-chord-mode 1)
 
 (require 'ace-jump-mode)
 
@@ -208,7 +213,8 @@
 (define-key ac-completing-map (kbd "C-s") 'ac-isearch)
 (setq ac-auto-start 1
       ac-delay 0.1
-      ac-auto-show-menu 0.1)
+      ac-auto-show-menu 0.1
+      ac-disable-faces nil)
 (setq-default ac-sources
               (append '(ac-source-filename
                         ac-source-files-in-current-dir)
@@ -319,7 +325,6 @@
 (add-hook 'php-mode-hook 'electric-pair-mode)
 (add-hook 'php-mode-hook 'electric-indent-mode)
 (add-hook 'php-mode-hook 'flycheck-mode)
-(add-hook 'php-mode-hook 'key-chord-mode)
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -406,9 +411,12 @@
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-s") 'evil-numbers/dec-at-pt)
 
+(define-key evil-visual-state-map (kbd "C-g") 'evil-exit-visual-state)
+(define-key evil-visual-state-map (kbd "M-SPC") 'evil-exit-visual-state)
 (define-key evil-visual-state-map (kbd "M-w") 'ace-jump-word-mode)
 
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+(define-key evil-insert-state-map (kbd "M-SPC") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
