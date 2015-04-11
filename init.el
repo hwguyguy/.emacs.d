@@ -153,6 +153,7 @@
         helm-projectile
         fiplr
         rainbow-mode
+        diminish
         org
         clojure-mode
         js2-mode
@@ -268,6 +269,18 @@
 
 (require 'rainbow-mode)
 
+(require 'diminish)
+(eval-after-load 'undo-tree
+  '(diminish 'undo-tree-mode))
+(eval-after-load 'abbrev
+  '(diminish 'abbrev-mode "Ab"))
+(eval-after-load 'helm
+  '(diminish 'helm-mode " H"))
+(eval-after-load 'paredit
+  '(diminish 'paredit-mode "Par"))
+(eval-after-load 'yasnippet
+  '(diminish 'yas-minor-mode "ys"))
+
 (defun my-emacs-lisp-mode-config()
   (setq indent-tabs-mode nil)
   (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
@@ -321,6 +334,7 @@
   (interactive)
   (insert "=>"))
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
+(key-chord-define php-mode-map ",," 'my-php-double-arrow-operator-shortcut)
 (add-hook 'php-mode-hook 'my-php-mode-config)
 (add-hook 'php-mode-hook 'electric-pair-mode)
 (add-hook 'php-mode-hook 'electric-indent-mode)
