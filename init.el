@@ -185,11 +185,15 @@
 
 (require 'evil-numbers)
 
+(add-to-list 'load-path "~/.emacs.d/evil-plugins")
+(require 'evil-little-word)
+
 (require 'helm-config)
 (setq helm-M-x-fuzzy-match t
       helm-buffers-fuzzy-matching t
       helm-imenu-fuzzy-match t)
 (helm-mode 1)
+(define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
 
 (require 'key-chord)
 (setq key-chord-two-keys-delay 0.5)
@@ -270,6 +274,8 @@
 (require 'rainbow-mode)
 
 (require 'diminish)
+(eval-after-load 'whitespace
+  '(diminish 'whitespace-mode))
 (eval-after-load 'undo-tree
   '(diminish 'undo-tree-mode))
 (eval-after-load 'abbrev
@@ -282,9 +288,9 @@
   '(diminish 'yas-minor-mode "ys"))
 
 (defun my-emacs-lisp-mode-config()
-  (setq indent-tabs-mode nil)
-  (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
-  (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent))
+  (setq indent-tabs-mode nil))
+(define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
+(define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent)
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -407,7 +413,10 @@
 (global-set-key (kbd "C-c C-k") 'ace-jump-word-mode)
 (global-set-key (kbd "C-c C-l") 'ace-jump-line-mode)
 
-(define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
+(define-key evil-motion-state-map (kbd "w") 'evil-forward-little-word-begin)
+(define-key evil-motion-state-map (kbd "b") 'evil-backward-little-word-begin)
+(define-key evil-motion-state-map (kbd "e") 'evil-forward-little-word-end)
+(define-key evil-motion-state-map (kbd "ge") 'evil-backward-little-word-end)
 
 (define-key evil-normal-state-map [f7] 'split-window-horizontally)
 (define-key evil-normal-state-map [f8] 'split-window-vertically)
