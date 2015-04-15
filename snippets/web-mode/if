@@ -4,4 +4,4 @@
 # --
 <?php if ($1): ?>
 	$0
-<?php endif ?>
+<?php endif; ?>

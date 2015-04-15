@@ -91,6 +91,13 @@
 ;;         (write-region (point-min) (point-max) new-filename nil nil nil nil)))))
 ;; (add-hook 'after-save-hook 'my-winscp-backup)
 
+(defmacro def-read-only-file (fun-name dir)
+  `(defun ,(intern fun-name) ()
+     (let ((filename (buffer-file-name)))
+       (when (and filename
+                  (string-match ,dir filename))
+         (read-only-mode)))))
+
 (defun my-helm-find-files-expand-directory-or-open-file()
   (interactive)
   (if (file-directory-p (helm-get-selection))
@@ -134,6 +141,16 @@
      (single
       (indent-to col)
       (insert "// ")))))
+
+(defun my-php-object-operator-shortcut ()
+  "Insert an object operator."
+  (interactive)
+  (insert "->"))
+
+(defun my-php-double-arrow-operator-shortcut ()
+  "Insert a double arrow operator."
+  (interactive)
+  (insert " => "))
 
 (require 'package)
 (setq package-list
@@ -331,14 +348,6 @@
 (defun my-php-mode-config()
   (setq indent-tabs-mode t)
   (c-set-style "hwguyguy-php"))
-(defun my-php-object-operator-shortcut ()
-  "Insert an object operator."
-  (interactive)
-  (insert "->"))
-(defun my-php-double-arrow-operator-shortcut ()
-  "Insert a double arrow operator."
-  (interactive)
-  (insert "=>"))
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
 (key-chord-define php-mode-map ",," 'my-php-double-arrow-operator-shortcut)
 (add-hook 'php-mode-hook 'my-php-mode-config)
@@ -371,6 +380,8 @@
 (add-hook 'web-mode-hook 'auto-complete-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'rainbow-mode)
+(key-chord-define web-mode-map ",." 'my-php-object-operator-shortcut)
+(key-chord-define web-mode-map ",," 'my-php-double-arrow-operator-shortcut)
 
 (defun my-css-mode-config()
   (setq tab-width 4))
@@ -418,6 +429,7 @@
 (define-key evil-motion-state-map (kbd "e") 'evil-forward-little-word-end)
 (define-key evil-motion-state-map (kbd "ge") 'evil-backward-little-word-end)
 
+(define-key evil-normal-state-map (kbd "M-SPC") 'keyboard-quit)
 (define-key evil-normal-state-map [f7] 'split-window-horizontally)
 (define-key evil-normal-state-map [f8] 'split-window-vertically)
 (define-key evil-normal-state-map (kbd "M-h") 'evil-window-left)
@@ -426,6 +438,7 @@
 (define-key evil-normal-state-map (kbd "M-l") 'evil-window-right)
 (define-key evil-normal-state-map (kbd "C-h") 'help-command)
 (define-key evil-normal-state-map (kbd "M-w") 'ace-jump-word-mode)
+(define-key evil-normal-state-map (kbd "M-r") 'ace-jump-line-mode)
 (define-key evil-normal-state-map " bb" 'helm-mini)
 (define-key evil-normal-state-map " ff" 'helm-find-files)
 (define-key evil-normal-state-map " be" 'ibuffer)
@@ -437,6 +450,7 @@
 (define-key evil-visual-state-map (kbd "C-g") 'evil-exit-visual-state)
 (define-key evil-visual-state-map (kbd "M-SPC") 'evil-exit-visual-state)
 (define-key evil-visual-state-map (kbd "M-w") 'ace-jump-word-mode)
+(define-key evil-visual-state-map (kbd "M-r") 'ace-jump-line-mode)
 
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "M-SPC") 'evil-normal-state)
@@ -448,6 +462,7 @@
 (define-key evil-insert-state-map (kbd "C-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "C-p") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
+(define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
 
 (let ((override (concat user-emacs-directory "my-init/override.el")))
   (when (file-exists-p override)
