@@ -104,6 +104,15 @@
       (helm-execute-persistent-action)
     (helm-maybe-exit-minibuffer)))
 
+(defun comment-or-uncomment-region-or-line ()
+  "Comments or uncomments the region or the current line if there's no active region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+        (setq beg (region-beginning) end (region-end))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (comment-or-uncomment-region beg end)))
+
 (defun my-c-indent-new-comment-line()
   "Add new comment line and auto close block comment."
   (interactive)
@@ -156,6 +165,8 @@
 (setq package-list
       '(evil
         evil-numbers
+        anzu
+        evil-anzu
         helm
         key-chord
         ace-jump-mode
@@ -194,6 +205,8 @@
 (require 'whitespace)
 (delete 'lines whitespace-style)
 
+(require 'anzu)
+
 (require 'evil)
 (evil-set-toggle-key "C-x C-z")
 (setq-default evil-symbol-word-search t)
@@ -201,6 +214,8 @@
 (evil-mode 1)
 
 (require 'evil-numbers)
+
+(require 'evil-anzu)
 
 (add-to-list 'load-path "~/.emacs.d/evil-plugins")
 (require 'evil-little-word)
@@ -219,6 +234,7 @@
 (require 'ace-jump-mode)
 
 (require 'paredit)
+(define-key paredit-mode-map (kbd "M-;") nil)
 
 (require 'auto-complete-config)
 (defun ac-expand-common ())
@@ -415,6 +431,7 @@
 
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)
+(global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
