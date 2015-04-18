@@ -464,6 +464,8 @@
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 (define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
 
+(evil-make-intercept-map paredit-mode-map)
+
 (let ((override (concat user-emacs-directory "my-init/override.el")))
   (when (file-exists-p override)
     (load override)))
