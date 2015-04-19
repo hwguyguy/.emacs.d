@@ -6,16 +6,16 @@
 (setq default-buffer-file-coding-system 'utf-8-unix
       system-time-locale "C")
 
+(setq make-backup-files nil); stop creating those backup~ files
+(setq auto-save-default nil); stop creating those #auto-save# files
+(setq backup-by-copying t); Stop emacs backup changing original file creation date
+
 (xterm-mouse-mode 1)
 (unless (display-graphic-p)
   (menu-bar-mode 0))
 (when (display-graphic-p)
   (tool-bar-mode 0))
 (column-number-mode 1)
-
-(setq make-backup-files nil); stop creating those backup~ files
-(setq auto-save-default nil); stop creating those #auto-save# files
-(setq backup-by-copying t); Stop emacs backup changing original file creation date
 
 (show-paren-mode t)
 (setq show-paren-style 'parenthese); do not blink to started brace
@@ -35,6 +35,8 @@
       scroll-step 1
       scroll-conservatively 10000
       auto-window-vscroll nil)
+(setq-default indent-tabs-mode t
+              tab-width 4)
 
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super
@@ -57,7 +59,11 @@
 
 (desktop-save-mode 1)
 
-(defun copy-all()
+(defmacro with-library (symbol &rest body)
+  `(when (require ,symbol nil t)
+     ,@body))
+
+(defun copy-all ()
   "Copy entire buffer to clipboard"
   (interactive)
   (clipboard-kill-ring-save (point-min) (point-max)))
@@ -74,10 +80,48 @@
         (clipboard-kill-region (point-min) (point-max)))
       (message filename))))
 
+(defun switch-to-previous-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
+
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(defun kill-and-join-forward (&optional arg)
+  (interactive "P")
+  (if (and (eolp) (not (bolp)))
+      (progn (forward-char 1)
+             (just-one-space 0)
+             (backward-char 1)
+             (kill-line arg))
+    (kill-line arg)))
+
+(defun load-theme-no-confirm (theme)
+  (interactive
+   (list
+    (intern (completing-read "Theme: "
+                             (mapcar 'symbol-name (custom-available-themes))))))
+  (load-theme theme t))
+
 (defun my-server-start ()
   (interactive)
   (server-start)
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
+
+(defun my-find-file-check-make-large-file-read-only-hook ()
+  "If a file is over a given size, make the buffer read only."
+  (when (> (buffer-size) (* 2 1024 1024))
+    ;; (setq buffer-read-only t)
+    (buffer-disable-undo)
+    (fundamental-mode)))
+;; (add-hook 'find-file-hooks 'my-find-file-check-make-large-file-read-only-hook)
 
 ;;; backup file if it is edited from winscp
 ;; (defun my-winscp-backup()
@@ -112,6 +156,15 @@
         (setq beg (region-beginning) end (region-end))
       (setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
+
+(defun c-lineup-arglist-tabs-only (ignored)
+  "Line up argument lists by tabs, not spaces"
+  (let* ((anchor (c-langelem-pos c-syntactic-element))
+         (column (c-langelem-2nd-pos c-syntactic-element))
+         (offset (- (1+ column) anchor))
+         (steps (floor offset c-basic-offset)))
+    (* (max steps 1)
+       c-basic-offset)))
 
 (defun my-c-indent-new-comment-line()
   "Add new comment line and auto close block comment."
@@ -160,6 +213,10 @@
   "Insert a double arrow operator."
   (interactive)
   (insert " => "))
+
+(defalias 'bc 'kill-this-buffer)
+(defalias 'dv 'describe-variable)
+(defalias 'dk 'describe-key)
 
 (require 'package)
 (setq package-list
@@ -211,6 +268,10 @@
 (evil-set-toggle-key "C-x C-z")
 (setq-default evil-symbol-word-search t)
 (delete 'help-mode evil-motion-state-modes)
+(delete 'eshell-mode evil-insert-state-modes)
+(add-to-list 'evil-emacs-state-modes 'eshell-mode)
+(delete 'term-mode evil-insert-state-modes)
+(add-to-list 'evil-emacs-state-modes 'term-mode)
 (evil-mode 1)
 
 (require 'evil-numbers)
@@ -235,6 +296,7 @@
 
 (require 'paredit)
 (define-key paredit-mode-map (kbd "M-;") nil)
+(define-key paredit-mode-map ";" nil)
 
 (require 'auto-complete-config)
 (defun ac-expand-common ())
@@ -336,6 +398,24 @@
 (add-hook 'org-mode-hook 'rainbow-mode)
 
 (require 'cc-mode)
+(c-add-style
+ "linux-tabs-only"
+ '("linux"
+   (c-basic-offset . 4)
+   (c-offsets-alist
+    (arglist-cont-nonempty
+     c-lineup-gcc-asm-reg
+     c-lineup-arglist-tabs-only))))
+(defun my-c-mode-config ()
+  (let ((filename (buffer-file-name)))
+    ;; Enable kernel mode for the appropriate files
+    (when (and filename
+               (string-match (expand-file-name "~/src/linux-trees")
+                             filename))
+      (setq indent-tabs-mode t
+            tab-width 4)
+      (c-set-style "linux-tabs-only"))))
+(add-hook 'c-mode-hook 'my-c-mode-config)
 (define-key c-mode-base-map (kbd "M-j") 'my-c-indent-new-comment-line)
 
 (require 'clojure-mode)
@@ -355,6 +435,12 @@
 (add-hook 'js2-mode-hook 'electric-pair-mode)
 (add-hook 'js2-mode-hook 'electric-indent-mode)
 
+(defun my-js-mode-config ()
+  (setq indent-tabs-mode t
+        tab-width 4
+        js-indent-level 4))
+(add-hook 'js-mode-hook 'my-js-mode-config)
+
 (require 'php-mode)
 (c-add-style
  "hwguyguy-php"
@@ -364,12 +450,20 @@
 (defun my-php-mode-config()
   (setq indent-tabs-mode t)
   (c-set-style "hwguyguy-php"))
-(key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
-(key-chord-define php-mode-map ",," 'my-php-double-arrow-operator-shortcut)
 (add-hook 'php-mode-hook 'my-php-mode-config)
 (add-hook 'php-mode-hook 'electric-pair-mode)
 (add-hook 'php-mode-hook 'electric-indent-mode)
 (add-hook 'php-mode-hook 'flycheck-mode)
+(key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
+(key-chord-define php-mode-map ",," 'my-php-double-arrow-operator-shortcut)
+
+(defun my-nxml-mode-config ()
+  (setq indent-tabs-mode t
+        tab-width 4
+        nxml-child-indent 4
+        nxml-slash-auto-complete-flag t))
+(add-hook 'nxml-mode-hook 'my-nxml-mode-config)
+(add-hook 'nxml-mode-hook 'auto-complete-mode)
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -412,6 +506,11 @@
 (add-hook 'scss-mode-hook 'electric-indent-mode)
 (add-hook 'scss-mode-hook 'emmet-mode)
 (add-hook 'scss-mode-hook 'rainbow-mode)
+
+(defun my-sh-mode-config ()
+  (setq indent-tabs-mode t
+        tab-width 4))
+(add-hook 'sh-mode-hook 'my-sh-mode-config)
 
 (add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
 (add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
