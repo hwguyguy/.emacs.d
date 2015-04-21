@@ -246,6 +246,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         web-mode
         scss-mode
         apache-mode
+        nginx-mode
         yaml-mode))
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ;; ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
@@ -284,7 +285,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'helm-config)
 (setq helm-M-x-fuzzy-match t
       helm-buffers-fuzzy-matching t
-      helm-imenu-fuzzy-match t)
+      helm-imenu-fuzzy-match t
+      helm-ff-newfile-prompt-p nil)
 (helm-mode 1)
 (define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
 
@@ -350,7 +352,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (unless (eq system-type 'windows-nt)
   (require 'multi-term)
-  (setq multi-term-program "/bin/bash"))
+  (defun my-term-send-ctrl-x ()
+    (interactive)
+    (term-send-raw-string "\C-x"))
+  (defun my-term-send-ctrl-z ()
+    (interactive)
+    (term-send-raw-string "\C-z"))
+  (setq multi-term-program "/bin/bash"
+        term-bind-key-alist (append '(("C-c C-x" . my-term-send-ctrl-x)
+                                      ("C-c C-z" . my-term-send-ctrl-z))
+                                    term-bind-key-alist)))
 
 (require 'flycheck)
 
@@ -410,11 +421,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (let ((filename (buffer-file-name)))
     ;; Enable kernel mode for the appropriate files
     (when (and filename
-               (string-match (expand-file-name "~/src/linux-trees")
-                             filename))
-      (setq indent-tabs-mode t
-            tab-width 4)
-      (c-set-style "linux-tabs-only"))))
+               (string-match (expand-file-name "~/src/linux-trees") filename))
+               (setq indent-tabs-mode t
+                     tab-width 4)
+               (c-set-style "linux-tabs-only"))))
 (add-hook 'c-mode-hook 'my-c-mode-config)
 (define-key c-mode-base-map (kbd "M-j") 'my-c-indent-new-comment-line)
 
@@ -506,6 +516,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-hook 'scss-mode-hook 'electric-indent-mode)
 (add-hook 'scss-mode-hook 'emmet-mode)
 (add-hook 'scss-mode-hook 'rainbow-mode)
+(add-hook 'scss-mode-hook 'auto-complete-mode)
 
 (defun my-sh-mode-config ()
   (setq indent-tabs-mode t
@@ -516,7 +527,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
 (add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
 (add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
-(add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+(add-to-list 'auto-mode-alist '("/etc/apache2/sites-\\(available\\|enabled\\)/" . apache-mode))
+
+(require 'nginx-mode)
+(add-to-list 'auto-mode-alist '("/etc/nginx/.*" . nginx-mode))
 
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
