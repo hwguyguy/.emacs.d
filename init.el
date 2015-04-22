@@ -57,8 +57,6 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :font (font-candidate '"Monaco-15:weight=normal"))))
 
-(desktop-save-mode 1)
-
 (defmacro with-library (symbol &rest body)
   `(when (require ,symbol nil t)
      ,@body))
@@ -214,6 +212,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (insert " => "))
 
+(defun my-semicolon-close-statement-shortcut ()
+  "Jump to the end of line and insert a semicolon."
+  (interactive)
+  (move-end-of-line nil)
+  (insert ";"))
+
 (defalias 'bc 'kill-this-buffer)
 (defalias 'dv 'describe-variable)
 (defalias 'dk 'describe-key)
@@ -262,6 +266,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (require 'whitespace)
 (delete 'lines whitespace-style)
+
+(desktop-save-mode 1)
+(add-to-list 'desktop-modes-not-to-save 'dired-mode)
 
 (require 'anzu)
 
@@ -358,10 +365,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (defun my-term-send-ctrl-z ()
     (interactive)
     (term-send-raw-string "\C-z"))
-  (setq multi-term-program "/bin/bash"
-        term-bind-key-alist (append '(("C-c C-x" . my-term-send-ctrl-x)
-                                      ("C-c C-z" . my-term-send-ctrl-z))
-                                    term-bind-key-alist)))
+  (setq multi-term-program "/bin/bash")
+  ;; (setq term-bind-key-alist (append '(("C-c C-x" . my-term-send-ctrl-x)
+  ;;                                     ("C-c C-z" . my-term-send-ctrl-z))
+  ;;                                   term-bind-key-alist))
+  (define-key term-mode-map (kbd "C-c C-k") 'term-char-mode)
+  (define-key term-raw-map (kbd "C-c C-j") 'term-line-mode)
+  (define-key term-raw-map (kbd "C-c C-x") 'my-term-send-ctrl-x)
+  (define-key term-raw-map (kbd "C-c C-z") 'my-term-send-ctrl-z))
 
 (require 'flycheck)
 
@@ -465,7 +476,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-hook 'php-mode-hook 'electric-indent-mode)
 (add-hook 'php-mode-hook 'flycheck-mode)
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
-(key-chord-define php-mode-map ",," 'my-php-double-arrow-operator-shortcut)
+(key-chord-define php-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
+(key-chord-define php-mode-map ";;" 'my-semicolon-close-statement-shortcut)
 
 (defun my-nxml-mode-config ()
   (setq indent-tabs-mode t
