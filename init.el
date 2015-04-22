@@ -424,10 +424,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  "linux-tabs-only"
  '("linux"
    (c-basic-offset . 4)
-   (c-offsets-alist
-    (arglist-cont-nonempty
-     c-lineup-gcc-asm-reg
-     c-lineup-arglist-tabs-only))))
+   (c-offsets-alist . ((arglist-cont-nonempty c-lineup-gcc-asm-reg c-lineup-arglist-tabs-only)))))
 (defun my-c-mode-config ()
   (let ((filename (buffer-file-name)))
     ;; Enable kernel mode for the appropriate files
