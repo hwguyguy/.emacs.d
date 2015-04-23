@@ -429,7 +429,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (let ((filename (buffer-file-name)))
     ;; Enable kernel mode for the appropriate files
     (when (and filename
-               (string-match (expand-file-name "~/src/linux-trees") filename))
+               (string-match (expand-file-name "~/pg/linux-trees") filename))
                (setq indent-tabs-mode t
                      tab-width 4)
                (c-set-style "linux-tabs-only"))))
@@ -605,6 +605,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (evil-make-intercept-map paredit-mode-map)
 
-(let ((override (concat user-emacs-directory "my-init/override.el")))
+(let ((override (concat user-emacs-directory "init.override.el")))
   (when (file-exists-p override)
     (load override)))

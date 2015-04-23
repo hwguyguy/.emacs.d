@@ -1,0 +1,11 @@
+/.*
+!/.gitignore
+!/.gitmodules
+/init.override.el
+/elpa
+/ac-comphist.dat
+/auto-save-list
+/bookmarks
+/projectile.cache
+/recentf
+/tramp
