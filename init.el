@@ -212,6 +212,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (insert " => "))
 
+(defun my-php-pseudo-variable-this-shortcut ()
+  "Insert $this."
+  (interactive)
+  (insert "$this->"))
+
 (defun my-semicolon-close-statement-shortcut ()
   "Jump to the end of line and insert a semicolon."
   (interactive)
@@ -380,6 +385,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'bookmark+)
 (setq bmkp-last-as-first-bookmark-file nil
       bmkp-bmenu-state-file (concat user-emacs-directory ".emacs-bmk-bmenu-state.el"))
+(defun my-recenter-after-bookmark-jump (&rest r)
+  (recenter))
+(advice-add 'bookmark-jump :after 'my-recenter-after-bookmark-jump)
 
 (require 'projectile)
 (require 'helm-projectile)
@@ -474,6 +482,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-hook 'php-mode-hook 'flycheck-mode)
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
 (key-chord-define php-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
+(key-chord-define php-mode-map "<>" 'my-php-pseudo-variable-this-shortcut)
 (key-chord-define php-mode-map ";;" 'my-semicolon-close-statement-shortcut)
 
 (defun my-nxml-mode-config ()
@@ -602,6 +611,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-insert-state-map (kbd "C-p") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 (define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
+(define-key evil-insert-state-map (kbd "C-l") 'yas-expand)
 
 (evil-make-intercept-map paredit-mode-map)
 
