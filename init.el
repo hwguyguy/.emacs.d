@@ -133,11 +133,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;         (write-region (point-min) (point-max) new-filename nil nil nil nil)))))
 ;; (add-hook 'after-save-hook 'my-winscp-backup)
 
-(defmacro def-read-only-file (fun-name dir)
+(defmacro def-read-only-file (fun-name path)
   `(defun ,(intern fun-name) ()
      (let ((filename (buffer-file-name)))
        (when (and filename
-                  (string-match ,dir filename))
+                  (string-match ,path filename))
          (read-only-mode)))))
 
 (defun my-helm-find-files-expand-directory-or-open-file()
@@ -224,8 +224,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (insert ";"))
 
 (defalias 'bc 'kill-this-buffer)
+(defalias 'ca 'copy-all)
 (defalias 'dv 'describe-variable)
 (defalias 'dk 'describe-key)
+(defalias 'df 'describe-function)
 
 (require 'package)
 (setq package-list
