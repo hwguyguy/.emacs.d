@@ -376,6 +376,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         multi-term-switch-after-close nil)
   (delete "C-h" term-unbind-key-list)
   (setq term-bind-key-alist (append '(("M-h" . term-send-backward-kill-word)
+                                      ("M-DEL" . term-send-backward-kill-word)
                                       ("M-d" . term-send-forward-kill-word))
                                     term-bind-key-alist))
   (define-key term-mode-map (kbd "C-c C-k") 'term-char-mode)
@@ -416,6 +417,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   '(diminish 'paredit-mode "Par"))
 (eval-after-load 'yasnippet
   '(diminish 'yas-minor-mode "ys"))
+(eval-after-load 'emmet-mode
+  '(diminish 'emmet-mode "Em"))
+(eval-after-load 'rainbow-mode
+  '(diminish 'rainbow-mode))
 
 (defun my-emacs-lisp-mode-config()
   (setq indent-tabs-mode nil))

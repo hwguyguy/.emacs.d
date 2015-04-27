@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Magento log var_dump();
+# key: md
+# --
+ob_start();
+var_dump($0);
+$log = ob_get_clean();
+Mage::log($log, null, 'a.log');
