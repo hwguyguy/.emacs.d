@@ -345,6 +345,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key yas-keymap (kbd "TAB") nil)
 (define-key yas-keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
 (define-key yas-keymap (kbd "M-p") 'yas-prev-field)
+(define-key ac-completing-map (kbd "M-n") 'yas-next-field-or-maybe-expand)
+(define-key ac-completing-map (kbd "M-p") 'yas-prev-field)
 (yas-global-mode 1)
 
 (defun my-snippet-mode-config()
@@ -482,7 +484,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  "hwguyguy-php"
  '("php"
    (c-basic-offset . 4)
-   (c-offsets-alist . ((statement-cont . (first php-lineup-cascaded-calls +))))))
+   (c-offsets-alist . ((case-label . 0)
+                       (statement-cont . (first php-lineup-cascaded-calls +))))))
 (defun my-php-mode-config()
   (setq indent-tabs-mode t)
   (c-set-style "hwguyguy-php"))
@@ -520,7 +523,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         web-mode-css-indent-offset 4
         web-mode-code-indent-offset 4
         web-mode-style-padding 0
-        web-mode-script-padding 4)
+        web-mode-script-padding 4
+        web-mode-enable-auto-pairing t)
   (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
   (modify-syntax-entry ?_    "_" web-mode-syntax-table))
 (add-hook 'web-mode-hook 'my-web-mode-config)
