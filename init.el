@@ -399,8 +399,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (require 'projectile)
 (require 'helm-projectile)
-(setq projectile-completion-system 'helm)
+(setq projectile-completion-system 'helm
+	  projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 (helm-projectile-on)
+(projectile-global-mode)
 
 (require 'fiplr)
 
@@ -528,7 +530,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
   (modify-syntax-entry ?_    "_" web-mode-syntax-table))
 (add-hook 'web-mode-hook 'my-web-mode-config)
-(add-hook 'web-mode-hook 'electric-pair-mode)
 (add-hook 'web-mode-hook 'auto-complete-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'rainbow-mode)
