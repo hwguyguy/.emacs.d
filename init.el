@@ -302,7 +302,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       helm-imenu-fuzzy-match t
       helm-ff-newfile-prompt-p nil)
 (helm-mode 1)
+(define-key helm-map (kbd "C-h") 'delete-backward-char)
+(define-key helm-map (kbd "M-h") 'backward-kill-word)
 (define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
+(let ((helm-find-files-C-h-map (lookup-key helm-find-files-map (kbd "C-h"))))
+  ;; make sure C-h is no longer a prefix key
+  (define-key helm-find-files-map (kbd "C-h") nil)
+  ;; rebind "C-h ..." to "M-m ..." to preserve functionality
+  (define-key helm-find-files-map (kbd "M-m") helm-find-files-C-h-map))
 
 (require 'key-chord)
 (setq key-chord-two-keys-delay 0.5)
