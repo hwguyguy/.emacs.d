@@ -534,8 +534,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         web-mode-style-padding 0
         web-mode-script-padding 4
         web-mode-enable-auto-pairing t)
-  (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
-  (modify-syntax-entry ?_    "_" web-mode-syntax-table))
+  ;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
+  ;; (modify-syntax-entry ?_    "_" web-mode-syntax-table)
+  )
 (add-hook 'web-mode-hook 'my-web-mode-config)
 (add-hook 'web-mode-hook 'auto-complete-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
