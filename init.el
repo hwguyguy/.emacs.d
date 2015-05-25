@@ -253,6 +253,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         org
         clojure-mode
         js2-mode
+		rvm
+		ruby-end
         php-mode
         web-mode
         scss-mode
@@ -487,6 +489,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         tab-width 4
         js-indent-level 4))
 (add-hook 'js-mode-hook 'my-js-mode-config)
+
+(require 'rvm)
+(rvm-use-default)
+
+(require 'ruby-end)
+
+(add-hook 'ruby-mode-hook 'flycheck-mode)
 
 (require 'php-mode)
 (c-add-style
