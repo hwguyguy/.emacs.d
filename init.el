@@ -38,6 +38,9 @@
 (setq-default indent-tabs-mode t
               tab-width 4)
 
+(unless (display-graphic-p)
+  (set-display-table-slot standard-display-table 'wrap ?\273))
+
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super
         mac-command-modifier 'meta
@@ -248,13 +251,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         projectile
         helm-projectile
         fiplr
+        sr-speedbar
         rainbow-mode
         diminish
         org
         clojure-mode
         js2-mode
-		rvm
-		ruby-end
+        rvm
+        ruby-end
         php-mode
         web-mode
         scss-mode
@@ -409,7 +413,39 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'projectile)
 (require 'helm-projectile)
 (setq projectile-completion-system 'helm
-	  projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+      projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+(defun projectile-get-ext-command ()
+  "Determine which external command to invoke based on the project's VCS."
+  (let ((vcs (projectile-project-vcs)))
+    (cond
+     ((eq vcs 'projectile) projectile-generic-command)
+     ((eq vcs 'git) projectile-git-command)
+     ((eq vcs 'hg) projectile-hg-command)
+     ((eq vcs 'fossil) projectile-fossil-command)
+     ((eq vcs 'bzr) projectile-bzr-command)
+     ((eq vcs 'darcs) projectile-darcs-command)
+     ((eq vcs 'svn) projectile-svn-command)
+     (t projectile-generic-command))))
+(defun projectile-project-vcs (&optional project-root)
+  "Determine the VCS used by the project if any.
+PROJECT-ROOT is the targeted directory.  If nil, use
+`projectile-project-root'."
+  (or project-root (setq project-root (projectile-project-root)))
+  (cond
+   ((projectile-file-exists-p (expand-file-name ".projectile" project-root)) 'projectile)
+   ((projectile-file-exists-p (expand-file-name ".git" project-root)) 'git)
+   ((projectile-file-exists-p (expand-file-name ".hg" project-root)) 'hg)
+   ((projectile-file-exists-p (expand-file-name ".fossil" project-root)) 'fossil)
+   ((projectile-file-exists-p (expand-file-name ".bzr" project-root)) 'bzr)
+   ((projectile-file-exists-p (expand-file-name "_darcs" project-root)) 'darcs)
+   ((projectile-file-exists-p (expand-file-name ".svn" project-root)) 'svn)
+   ((projectile-locate-dominating-file project-root ".git") 'git)
+   ((projectile-locate-dominating-file project-root ".hg") 'hg)
+   ((projectile-locate-dominating-file project-root ".fossil") 'fossil)
+   ((projectile-locate-dominating-file project-root ".bzr") 'bzr)
+   ((projectile-locate-dominating-file project-root "_darcs") 'darcs)
+   ((projectile-locate-dominating-file project-root ".svn") 'svn)
+   (t 'none)))
 (helm-projectile-on)
 (projectile-global-mode)
 
