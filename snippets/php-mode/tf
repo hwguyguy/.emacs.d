@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: protected function
+# key: tf
+# --
+protected function $1($2) {
+	$0
+}
