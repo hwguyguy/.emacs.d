@@ -378,6 +378,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (puthash "elf" "<?php elseif (${child}): ?>" tbl)
   (puthash "el" "<?php else: ?>" tbl)
   (puthash "fi" "<?php endif; ?>" tbl))
+(let ((tbl (gethash "snippets" (gethash "css" emmet-snippets))))
+  (puthash "ta" "text-align:center;" tbl))
 
 (unless (eq system-type 'windows-nt)
   (require 'multi-term)
@@ -587,7 +589,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'rainbow-mode)
 (key-chord-define web-mode-map ",." 'my-php-object-operator-shortcut)
-(key-chord-define web-mode-map ",," 'my-php-double-arrow-operator-shortcut)
+(key-chord-define web-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
 
 (defun my-css-mode-config()
   (setq tab-width 4))
