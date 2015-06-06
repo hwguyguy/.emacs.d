@@ -242,6 +242,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         key-chord
         ace-jump-mode
         paredit
+        fuzzy
         auto-complete
         yasnippet
         emmet-mode
@@ -257,8 +258,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         org
         clojure-mode
         js2-mode
-        rvm
         ruby-end
+        rinari
         php-mode
         web-mode
         scss-mode
@@ -528,10 +529,9 @@ PROJECT-ROOT is the targeted directory.  If nil, use
         js-indent-level 4))
 (add-hook 'js-mode-hook 'my-js-mode-config)
 
-(require 'rvm)
-(rvm-use-default)
-
 (require 'ruby-end)
+
+(require 'rinari)
 
 (add-hook 'ruby-mode-hook 'flycheck-mode)
 
@@ -679,6 +679,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "M-h") 'backward-kill-word)
 (define-key evil-insert-state-map (kbd "C-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "C-p") 'ac-start)
+(define-key evil-insert-state-map (kbd "C-S-n") 'ac-fuzzy-complete)
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 (define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
 (define-key evil-insert-state-map (kbd "C-l") 'yas-expand)
