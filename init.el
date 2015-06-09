@@ -281,10 +281,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'whitespace)
 (delete 'lines whitespace-style)
 
+(electric-pair-mode 1)
+(electric-indent-mode 1)
+
 (desktop-save-mode 1)
 (add-to-list 'desktop-modes-not-to-save 'dired-mode)
-
-(require 'anzu)
 
 (require 'evil)
 (evil-set-toggle-key "C-x C-z")
@@ -297,6 +298,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (evil-mode 1)
 
 (require 'evil-numbers)
+
+(require 'anzu)
 
 (require 'evil-anzu)
 
@@ -481,7 +484,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'electric-indent-mode)
 
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
@@ -505,13 +507,13 @@ PROJECT-ROOT is the targeted directory.  If nil, use
                (c-set-style "linux-tabs-only"))))
 (add-hook 'c-mode-hook 'my-c-mode-config)
 (define-key c-mode-base-map (kbd "M-j") 'my-c-indent-new-comment-line)
+(define-key c-mode-base-map (kbd "C-h") 'electric-pair-delete-pair)
 
 (require 'clojure-mode)
 (defun my-clojure-mode-config()
   (setq indent-tabs-mode nil))
 (add-hook 'clojure-mode-hook 'my-clojure-mode-config)
 (add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'clojure-mode-hook 'electric-indent-mode)
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -520,8 +522,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
         tab-width 4
         js2-basic-offset 4))
 (add-hook 'js2-mode-hook 'my-js2-mode-config)
-(add-hook 'js2-mode-hook 'electric-pair-mode)
-(add-hook 'js2-mode-hook 'electric-indent-mode)
 
 (defun my-js-mode-config ()
   (setq indent-tabs-mode t
@@ -546,8 +546,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq indent-tabs-mode t)
   (c-set-style "hwguyguy-php"))
 (add-hook 'php-mode-hook 'my-php-mode-config)
-(add-hook 'php-mode-hook 'electric-pair-mode)
-(add-hook 'php-mode-hook 'electric-indent-mode)
 (add-hook 'php-mode-hook 'flycheck-mode)
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
 (key-chord-define php-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
@@ -595,13 +593,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq tab-width 4))
 (add-hook 'css-mode-hook 'my-css-mode-config)
 (add-hook 'css-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'electric-pair-mode)
 (add-hook 'css-mode-hook 'rainbow-mode)
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (setq scss-compile-at-save nil)
-(add-hook 'scss-mode-hook 'electric-pair-mode)
-(add-hook 'scss-mode-hook 'electric-indent-mode)
 (add-hook 'scss-mode-hook 'emmet-mode)
 (add-hook 'scss-mode-hook 'rainbow-mode)
 (add-hook 'scss-mode-hook 'auto-complete-mode)
@@ -675,8 +670,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
-(define-key evil-insert-state-map (kbd "C-h") 'delete-backward-char)
-(define-key evil-insert-state-map (kbd "M-h") 'backward-kill-word)
 (define-key evil-insert-state-map (kbd "C-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "C-p") 'ac-start)
 (define-key evil-insert-state-map (kbd "C-S-n") 'ac-fuzzy-complete)
