@@ -38,6 +38,9 @@
 (setq-default indent-tabs-mode t
               tab-width 4)
 
+(put 'narrow-to-defun  'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
 (unless (display-graphic-p)
   (set-display-table-slot standard-display-table 'wrap ?\273))
 
