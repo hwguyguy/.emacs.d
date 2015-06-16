@@ -510,7 +510,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
                (c-set-style "linux-tabs-only"))))
 (add-hook 'c-mode-hook 'my-c-mode-config)
 (define-key c-mode-base-map (kbd "M-j") 'my-c-indent-new-comment-line)
-(define-key c-mode-base-map (kbd "C-h") 'electric-pair-delete-pair)
 
 (require 'clojure-mode)
 (defun my-clojure-mode-config()
@@ -628,7 +627,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
 (add-hook 'ibuffer-mode-hook 'hl-line-mode)
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
+;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -639,6 +638,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (global-set-key (kbd "M-s") 'ace-jump-char-mode)
 (global-set-key (kbd "C-c C-k") 'ace-jump-word-mode)
 (global-set-key (kbd "C-c C-l") 'ace-jump-line-mode)
+
+(define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 
 (define-key evil-motion-state-map (kbd "w") 'evil-forward-little-word-begin)
 (define-key evil-motion-state-map (kbd "b") 'evil-backward-little-word-begin)
