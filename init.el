@@ -275,8 +275,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                          ("org" . "http://orgmode.org/elpa/")))
 (setq package-enable-at-startup nil)
 (package-initialize)
-(or (file-exists-p package-user-dir)
-    (package-refresh-contents))
+(unless package-archive-contents
+  (package-refresh-contents))
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
@@ -580,7 +580,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
         web-mode-code-indent-offset 4
         web-mode-style-padding 0
         web-mode-script-padding 4
-        web-mode-enable-auto-pairing t)
+        web-mode-enable-auto-pairing t
+        web-mode-engines-alist '(("php" . "\\.phtml\\'")))
   ;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
   ;; (modify-syntax-entry ?_    "_" web-mode-syntax-table)
   )
