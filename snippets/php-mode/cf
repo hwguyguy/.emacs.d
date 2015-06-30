@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: public function __construct()
-# key: fc
+# key: cf
 # --
 public function __construct() {
 	$0
