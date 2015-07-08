@@ -532,6 +532,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'js-mode-hook 'my-js-mode-config)
 
 (require 'ruby-end)
+(setq ruby-end-insert-newline nil)
 
 (require 'rinari)
 
