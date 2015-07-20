@@ -344,8 +344,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key ac-completing-map [return] nil)
 (define-key ac-completing-map "\M-n" nil)
 (define-key ac-completing-map "\M-p" nil)
-(define-key ac-completing-map (kbd "C-n") 'ac-expand)
-(define-key ac-completing-map (kbd "C-p") 'ac-expand-previous)
+(define-key ac-completing-map (kbd "M-n") 'ac-expand)
+(define-key ac-completing-map (kbd "M-p") 'ac-expand-previous)
 (define-key ac-completing-map (kbd "C-s") 'ac-isearch)
 (setq ac-auto-start 1
       ac-delay 0.1
@@ -363,10 +363,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
       `(,(concat user-emacs-directory "snippets")))
 (define-key yas-keymap [(tab)] nil)
 (define-key yas-keymap (kbd "TAB") nil)
-(define-key yas-keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
-(define-key yas-keymap (kbd "M-p") 'yas-prev-field)
-(define-key ac-completing-map (kbd "M-n") 'yas-next-field-or-maybe-expand)
-(define-key ac-completing-map (kbd "M-p") 'yas-prev-field)
+(define-key yas-keymap (kbd "M-l") 'yas-next-field-or-maybe-expand)
+(define-key yas-keymap (kbd "M-S-l") 'yas-prev-field)
+(define-key yas-keymap (kbd "M-L") 'yas-prev-field)
+(define-key ac-completing-map (kbd "M-l") 'yas-next-field-or-maybe-expand)
+(define-key ac-completing-map (kbd "M-S-l") 'yas-prev-field)
+(define-key ac-completing-map (kbd "M-L") 'yas-prev-field)
 (yas-global-mode 1)
 
 (defun my-snippet-mode-config()
@@ -516,6 +518,13 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq indent-tabs-mode nil))
 (add-hook 'clojure-mode-hook 'my-clojure-mode-config)
 (add-hook 'clojure-mode-hook 'paredit-mode)
+
+(add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+(setq cperl-highlight-variables-indiscriminately t
+      cperl-indent-level 4
+      cperl-indent-parens-as-block t
+      cperl-close-paren-offset -4
+      cperl-continued-statement-offset 4)
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -674,11 +683,13 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "M-SPC") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
+(define-key evil-insert-state-map (kbd "C-n") 'next-line)
+(define-key evil-insert-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
-(define-key evil-insert-state-map (kbd "C-n") 'ac-start)
-(define-key evil-insert-state-map (kbd "C-p") 'ac-start)
-(define-key evil-insert-state-map (kbd "C-S-n") 'ac-fuzzy-complete)
+(define-key evil-insert-state-map (kbd "M-n") 'ac-start)
+(define-key evil-insert-state-map (kbd "M-p") 'ac-start)
+(define-key evil-insert-state-map (kbd "M-S-n") 'ac-fuzzy-complete)
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 (define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
 (define-key evil-insert-state-map (kbd "C-l") 'yas-expand)
