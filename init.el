@@ -584,17 +584,17 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (defun my-web-mode-config()
   (setq indent-tabs-mode t
-        tab-width 4
-        web-mode-markup-indent-offset 4
-        web-mode-css-indent-offset 4
-        web-mode-code-indent-offset 4
-        web-mode-style-padding 0
-        web-mode-script-padding 4
-        web-mode-enable-auto-pairing t
-        web-mode-engines-alist '(("php" . "\\.phtml\\'")))
-  ;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
-  ;; (modify-syntax-entry ?_    "_" web-mode-syntax-table)
-  )
+        tab-width 4))
+(setq web-mode-markup-indent-offset 4
+      web-mode-css-indent-offset 4
+      web-mode-code-indent-offset 4
+      web-mode-style-padding 0
+      web-mode-script-padding 4
+      web-mode-enable-auto-pairing t
+      web-mode-enable-auto-quoting nil
+      web-mode-engines-alist '(("php" . "\\.phtml\\'")))
+;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
+;; (modify-syntax-entry ?_    "_" web-mode-syntax-table)
 (add-hook 'web-mode-hook 'my-web-mode-config)
 (add-hook 'web-mode-hook 'auto-complete-mode)
 (add-hook 'web-mode-hook 'emmet-mode)
