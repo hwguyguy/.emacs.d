@@ -582,6 +582,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (defun my-web-mode-config()
   (setq indent-tabs-mode t
         tab-width 4))
@@ -693,6 +694,12 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "M-w") 'ace-jump-word-mode)
 (define-key evil-insert-state-map (kbd "M-r") 'ace-jump-line-mode)
 (define-key evil-insert-state-map (kbd "C-l") 'yas-expand)
+
+(define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
+(define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
+(define-key evil-ex-completion-map (kbd "C-d") 'delete-forward-char)
+(define-key evil-ex-completion-map (kbd "M-p") 'previous-complete-history-element)
+(define-key evil-ex-completion-map (kbd "M-n") 'next-complete-history-element)
 
 (evil-make-intercept-map paredit-mode-map)
 
