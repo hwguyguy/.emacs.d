@@ -495,6 +495,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
       org-startup-folded 'showeverything)
 (add-hook 'org-mode-hook 'auto-complete-mode)
 (add-hook 'org-mode-hook 'rainbow-mode)
+(define-key org-mode-map (kbd "M-h") 'backward-kill-word)
 
 (require 'cc-mode)
 (c-add-style
