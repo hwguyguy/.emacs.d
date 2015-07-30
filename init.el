@@ -490,6 +490,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
+(require 'org)
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
       org-startup-folded 'showeverything)
