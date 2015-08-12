@@ -260,6 +260,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         diminish
         org
         clojure-mode
+        go-mode
         js2-mode
         ruby-end
         rinari
