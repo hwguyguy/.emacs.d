@@ -691,6 +691,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
+(define-key evil-insert-state-map (kbd "M-h") 'backward-kill-word)
 (define-key evil-insert-state-map (kbd "M-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-p") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-S-n") 'ac-fuzzy-complete)
