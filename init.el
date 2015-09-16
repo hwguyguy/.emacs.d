@@ -597,6 +597,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
       web-mode-enable-auto-pairing t
       web-mode-enable-auto-quoting nil
       web-mode-engines-alist '(("php" . "\\.phtml\\'")))
+(set-face-attribute 'web-mode-symbol-face nil :foreground "Snow4")
 ;; (set-face-attribute 'web-mode-html-attr-name-face nil :foreground "#93a1a1")
 ;; (modify-syntax-entry ?_    "_" web-mode-syntax-table)
 (add-hook 'web-mode-hook 'my-web-mode-config)
