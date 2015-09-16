@@ -643,6 +643,23 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key ibuffer-mode-map (kbd "K") 'ibuffer-do-kill-lines)
 (add-hook 'ibuffer-mode-hook 'hl-line-mode)
 
+(defun my-extra-match (orig-fun &rest args)
+  (interactive)
+  (condition-case err
+      (apply orig-fun args)
+    (error
+     (cond ((string-equal major-mode "nxml-mode")
+            (nxml-token-after)
+            (cond ((memq xmltok-type '(start-tag partial-start-tag))
+                   (nxml-up-element)
+                   (backward-sexp))
+                  ((memq xmltok-type '(end-tag partial-end-tag))
+                   (nxml-backward-up-element)
+                   (forward-sexp))))
+           ((string-equal major-mode "web-mode")
+            (web-mode-navigate))))))
+(advice-add 'evil-jump-item :around 'my-extra-match)
+
 ;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
