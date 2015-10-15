@@ -674,6 +674,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (define-key key-translation-map (kbd "C-h") (kbd "DEL"))
 
+(define-key minibuffer-inactive-mode-map [mouse-1] nil)
+
 (define-key evil-motion-state-map (kbd "w") 'evil-forward-little-word-begin)
 (define-key evil-motion-state-map (kbd "b") 'evil-backward-little-word-begin)
 (define-key evil-motion-state-map (kbd "e") 'evil-forward-little-word-end)
