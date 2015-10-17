@@ -492,9 +492,12 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (require 'org)
+(defun my-org-mode-config ()
+  (setq indent-tabs-mode nil))
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
       org-startup-folded 'showeverything)
+(add-hook 'org-mode-hook 'my-org-mode-config)
 (add-hook 'org-mode-hook 'auto-complete-mode)
 (add-hook 'org-mode-hook 'rainbow-mode)
 (define-key org-mode-map (kbd "M-h") 'backward-kill-word)
