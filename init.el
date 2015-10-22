@@ -392,6 +392,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (puthash "ta" "text-align:center;" tbl))
 
 (unless (eq system-type 'windows-nt)
+  (require 'term)
+  (define-key term-raw-map (kbd "M-x") 'helm-M-x)
+
   (require 'multi-term)
   (defun my-term-send-ctrl-x ()
     (interactive)
@@ -404,13 +407,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (delete "C-h" term-unbind-key-list)
   (setq term-bind-key-alist (append '(("M-h" . term-send-backward-kill-word)
                                       ("M-DEL" . term-send-backward-kill-word)
-                                      ("M-d" . term-send-forward-kill-word))
-                                    term-bind-key-alist))
-  (define-key term-mode-map (kbd "C-c C-k") 'term-char-mode)
-  (define-key term-raw-map (kbd "C-c C-j") 'term-line-mode)
-  (define-key term-raw-map (kbd "M-x") 'helm-M-x)
-  (define-key term-raw-map (kbd "C-c C-x") 'my-term-send-ctrl-x)
-  (define-key term-raw-map (kbd "C-c C-z") 'my-term-send-ctrl-z))
+                                      ("M-d" . term-send-forward-kill-word)
+                                      ("C-z" . my-term-send-ctrl-z)
+                                      ("C-c C-x" . my-term-send-ctrl-x)
+                                      ("C-c C-j" . term-line-mode)
+                                      ("C-c C-k" . term-char-mode))
+                                    term-bind-key-alist)))
 
 (require 'flycheck)
 
