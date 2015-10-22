@@ -634,6 +634,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-to-list 'auto-mode-alist '("/etc/apache2/sites-\\(available\\|enabled\\)/" . apache-mode))
 
 (require 'nginx-mode)
+(setq nginx-indent-tabs-mode t)
 (add-to-list 'auto-mode-alist '("/etc/nginx/.*" . nginx-mode))
 
 (require 'yaml-mode)
@@ -715,6 +716,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (define-key evil-insert-state-map (kbd "C-v") 'quoted-insert)
 (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
 (define-key evil-insert-state-map (kbd "M-h") 'backward-kill-word)
+(define-key evil-insert-state-map (kbd "C-t") 'transpose-chars)
 (define-key evil-insert-state-map (kbd "M-n") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-p") 'ac-start)
 (define-key evil-insert-state-map (kbd "M-S-n") 'ac-fuzzy-complete)
