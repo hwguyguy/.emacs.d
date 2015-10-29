@@ -237,7 +237,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defalias 'tt 'multi-term)
 
 (require 'package)
-(setq package-list
+(setq my-packages
       '(undo-tree
         evil
         evil-numbers
@@ -278,12 +278,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                          ("melpa" . "http://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
 (setq package-enable-at-startup nil)
+(defun my-packages-installed-p ()
+  (loop for p in my-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
 (package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+(unless (my-packages-installed-p)
+  (package-refresh-contents)
+  (dolist (package my-packages)
+    (unless (package-installed-p package)
+      (package-install package))))
 
 (require 'whitespace)
 (delete 'lines whitespace-style)
