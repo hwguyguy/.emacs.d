@@ -234,10 +234,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (defalias 'dv 'describe-variable)
 (defalias 'dk 'describe-key)
 (defalias 'df 'describe-function)
+(defalias 'tt 'multi-term)
 
 (require 'package)
 (setq package-list
-      '(evil
+      '(undo-tree
+        evil
         evil-numbers
         anzu
         evil-anzu
@@ -290,6 +292,16 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (desktop-save-mode 1)
 (add-to-list 'desktop-modes-not-to-save 'dired-mode)
+
+(require 'undo-tree)
+(defun undo-in-term-mode ()
+  (interactive)
+  (when (and (fboundp 'my-term-send-undo)
+             (string-equal major-mode "term-mode")
+             (term-in-char-mode))
+    (my-term-send-undo)
+    t))
+(advice-add 'undo-tree-undo :before-until 'undo-in-term-mode)
 
 (require 'evil)
 (evil-set-toggle-key "C-x C-z")
@@ -396,20 +408,39 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key term-raw-map (kbd "M-x") 'helm-M-x)
 
   (require 'multi-term)
-  (defun my-term-send-ctrl-x ()
+  (defun my-term-send-backward-kill-word ()
     (interactive)
-    (term-send-raw-string "\C-x"))
+    (term-send-raw-string "\e\C-?"))
+  (defun my-term-send-undo ()
+    (interactive)
+    (term-send-raw-string "\C-_"))
   (defun my-term-send-ctrl-z ()
     (interactive)
     (term-send-raw-string "\C-z"))
-  (setq multi-term-program "/bin/bash"
+  (defun my-term-send-ctrl-x ()
+    (interactive)
+    (term-send-raw-string "\C-x"))
+  (defun my-term-send-shift-tab ()
+    (interactive)
+    (term-send-raw-string "\e[Z"))
+  (defun my-term-toggle-mode ()
+    (interactive)
+    (if (term-in-line-mode)
+        (term-char-mode)
+      (term-line-mode)))
+  (defun my-term-program (&rest bins)
+    (if (executable-find (car bins))
+        (car bins)
+      (apply 'my-term-program (cdr bins))))
+  (setq multi-term-program (my-term-program "/bin/zsh" "/bin/bash")
         multi-term-switch-after-close nil)
   (delete "C-h" term-unbind-key-list)
-  (setq term-bind-key-alist (append '(("M-h" . term-send-backward-kill-word)
-                                      ("M-DEL" . term-send-backward-kill-word)
+  (setq term-bind-key-alist (append '(("M-h" . my-term-send-backward-kill-word)
+                                      ("M-DEL" . my-term-send-backward-kill-word)
                                       ("M-d" . term-send-forward-kill-word)
                                       ("C-z" . my-term-send-ctrl-z)
                                       ("C-c C-x" . my-term-send-ctrl-x)
+                                      ("<backtab>" . my-term-send-shift-tab)
                                       ("C-c C-j" . term-line-mode)
                                       ("C-c C-k" . term-char-mode))
                                     term-bind-key-alist)))
