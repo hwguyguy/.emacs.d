@@ -262,6 +262,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         diminish
         org
         clojure-mode
+        clj-refactor
         go-mode
         js2-mode
         ruby-end
@@ -557,6 +558,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq indent-tabs-mode nil))
 (add-hook 'clojure-mode-hook 'my-clojure-mode-config)
 (add-hook 'clojure-mode-hook 'paredit-mode)
+(add-hook 'clojure-mode-hook 'clj-refactor-mode)
+
+(require 'clj-refactor)
+(cljr-add-keybindings-with-prefix "C-c C-m")
 
 (add-to-list 'auto-mode-alist '("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 (setq cperl-highlight-variables-indiscriminately t
