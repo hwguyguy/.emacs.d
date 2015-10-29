@@ -305,6 +305,11 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (advice-add 'undo-tree-undo :before-until 'undo-in-term-mode)
 
 (require 'evil)
+(defun translate-ctrl-h-to-del-in-evil-insert-state (prompt)
+  (if (and (bound-and-true-p evil-mode)
+           (eq evil-state 'insert))
+      (kbd "DEL")
+    (kbd "C-h")))
 (evil-set-toggle-key "C-x C-z")
 (setq-default evil-symbol-word-search t)
 (delete 'help-mode evil-motion-state-modes)
@@ -702,7 +707,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
             (web-mode-navigate))))))
 (advice-add 'evil-jump-item :around 'my-extra-match)
 
-;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "M-h") 'backward-kill-word)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -714,7 +718,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (global-set-key (kbd "C-c C-k") 'ace-jump-word-mode)
 (global-set-key (kbd "C-c C-l") 'ace-jump-line-mode)
 
-(define-key key-translation-map (kbd "C-h") (kbd "DEL"))
+(define-key key-translation-map (kbd "C-h") 'translate-ctrl-h-to-del-in-evil-insert-state)
 
 (define-key minibuffer-inactive-mode-map [mouse-1] nil)
 
