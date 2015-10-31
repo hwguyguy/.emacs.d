@@ -539,7 +539,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq indent-tabs-mode nil))
 (setq org-loop-over-headlines-in-active-region t
       org-log-done 'time
-      org-startup-folded 'showeverything)
+      org-startup-folded 'showeverything
+      org-src-fontify-natively t)
 (add-hook 'org-mode-hook 'my-org-mode-config)
 (add-hook 'org-mode-hook 'auto-complete-mode)
 (add-hook 'org-mode-hook 'rainbow-mode)
