@@ -553,6 +553,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
    (c-basic-offset . 4)
    (c-offsets-alist . ((arglist-cont-nonempty c-lineup-gcc-asm-reg c-lineup-arglist-tabs-only)))))
 (defun my-c-mode-config ()
+  (add-to-list 'write-file-functions 'delete-trailing-whitespace)
   (let ((filename (buffer-file-name)))
     ;; Enable kernel mode for the appropriate files
     (when (and filename
@@ -609,7 +610,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
    (c-offsets-alist . ((case-label . 0)
                        (statement-cont . (first php-lineup-cascaded-calls +))))))
 (defun my-php-mode-config()
-  (setq indent-tabs-mode t)
+  (setq indent-tabs-mode t
+        require-final-newline t)
   (c-set-style "hwguyguy-php"))
 (add-hook 'php-mode-hook 'my-php-mode-config)
 (add-hook 'php-mode-hook 'flycheck-mode)
