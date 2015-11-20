@@ -63,6 +63,11 @@
   (when (eq system-type 'darwin)
     (set-face-attribute 'default nil :font (font-candidate '"Monaco-15:weight=normal"))))
 
+(defun executable-find-first-occurrence (&rest bins)
+  (if (executable-find (car bins))
+      (car bins)
+    (apply 'executable-find-first-occurrence (cdr bins))))
+
 (defmacro with-library (symbol &rest body)
   `(when (require ,symbol nil t)
      ,@body))
@@ -265,6 +270,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         clj-refactor
         go-mode
         js2-mode
+        ac-js2
         ruby-end
         rinari
         php-mode
@@ -438,11 +444,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (if (term-in-line-mode)
         (term-char-mode)
       (term-line-mode)))
-  (defun my-term-program (&rest bins)
-    (if (executable-find (car bins))
-        (car bins)
-      (apply 'my-term-program (cdr bins))))
-  (setq multi-term-program (my-term-program "/bin/zsh" "/bin/bash")
+  (setq multi-term-program nil
         multi-term-switch-after-close nil)
   (delete "C-h" term-unbind-key-list)
   (setq term-bind-key-alist (append '(("M-h" . my-term-send-backward-kill-word)
@@ -586,8 +588,12 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (defun my-js2-mode-config()
   (setq indent-tabs-mode t
         tab-width 4
-        js2-basic-offset 4))
+        js2-basic-offset 4)
+  (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 (add-hook 'js2-mode-hook 'my-js2-mode-config)
+
+(require 'ac-js2)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
 
 (defun my-js-mode-config ()
   (setq indent-tabs-mode t
