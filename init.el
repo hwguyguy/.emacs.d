@@ -36,7 +36,8 @@
       scroll-conservatively 10000
       auto-window-vscroll nil)
 (setq-default indent-tabs-mode t
-              tab-width 4)
+              tab-width 4
+              c-basic-offset 4)
 
 (put 'narrow-to-defun  'disabled nil)
 (put 'narrow-to-region 'disabled nil)
