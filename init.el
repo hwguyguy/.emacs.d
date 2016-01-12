@@ -152,12 +152,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                   (string-match ,path filename))
          (read-only-mode)))))
 
-(defun my-helm-find-files-expand-directory-or-open-file()
-  (interactive)
-  (if (file-directory-p (helm-get-selection))
-      (helm-execute-persistent-action)
-    (helm-maybe-exit-minibuffer)))
-
 (defun comment-or-uncomment-region-or-line ()
   "Comments or uncomments the region or the current line if there's no active region."
   (interactive)
@@ -340,6 +334,15 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (require 'evil-little-word)
 
 (require 'helm-config)
+(defun helm-find-files-expand-directory-or-open-file ()
+  (interactive)
+  (if (file-directory-p (helm-get-selection))
+      (helm-execute-persistent-action)
+    (helm-maybe-exit-minibuffer)))
+(defun helm-find-files-insert-current-directory ()
+  (interactive)
+  (kill-whole-line)
+  (insert "/./"))
 (setq helm-M-x-fuzzy-match t
       helm-buffers-fuzzy-matching t
       helm-imenu-fuzzy-match t
@@ -347,7 +350,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (helm-mode 1)
 (define-key helm-map (kbd "C-h") 'delete-backward-char)
 (define-key helm-map (kbd "M-h") 'backward-kill-word)
-(define-key helm-find-files-map (kbd "<RET>") 'my-helm-find-files-expand-directory-or-open-file)
+(define-key helm-find-files-map (kbd "<RET>") 'helm-find-files-expand-directory-or-open-file)
+(define-key helm-find-files-map (kbd "C-r") 'helm-find-files-insert-current-directory)
 (let ((helm-find-files-C-h-map (lookup-key helm-find-files-map (kbd "C-h"))))
   ;; make sure C-h is no longer a prefix key
   (define-key helm-find-files-map (kbd "C-h") nil)
