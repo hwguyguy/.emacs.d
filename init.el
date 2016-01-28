@@ -343,6 +343,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (kill-whole-line)
   (insert "/./"))
+(defun helm-buffer-run-kill-buffers-persistent ()
+  (interactive)
+  (with-helm-alive-p
+    (helm-attrset 'kill-action '(helm-kill-marked-buffers . never-split))
+    (helm-execute-persistent-action 'kill-action)
+    (helm-force-update)))
 (setq helm-M-x-fuzzy-match t
       helm-buffers-fuzzy-matching t
       helm-imenu-fuzzy-match t
@@ -357,6 +363,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (define-key helm-find-files-map (kbd "C-h") nil)
   ;; rebind "C-h ..." to "M-m ..." to preserve functionality
   (define-key helm-find-files-map (kbd "M-m") helm-find-files-C-h-map))
+(define-key helm-buffer-map (kbd "M-D" ) 'helm-buffer-run-kill-buffers-persistent)
 
 (require 'key-chord)
 (setq key-chord-two-keys-delay 0.5)
