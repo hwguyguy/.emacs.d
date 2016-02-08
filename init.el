@@ -617,6 +617,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (setq ruby-end-insert-newline nil)
 
 (require 'rinari)
+(global-rinari-mode 1)
 
 (add-hook 'ruby-mode-hook 'flycheck-mode)
 
