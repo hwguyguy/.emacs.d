@@ -238,7 +238,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (require 'package)
 (setq my-packages
-      '(undo-tree
+      '(
+        undo-tree
         evil
         evil-numbers
         anzu
@@ -265,7 +266,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         clj-refactor
         go-mode
         js2-mode
-        ac-js2
+        ;; ac-js2
         ruby-end
         rinari
         php-mode
@@ -273,7 +274,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         scss-mode
         apache-mode
         nginx-mode
-        yaml-mode))
+        yaml-mode
+        ))
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ;; ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
                          ("melpa" . "http://melpa.org/packages/")
@@ -604,8 +606,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 (add-hook 'js2-mode-hook 'my-js2-mode-config)
 
-(require 'ac-js2)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
+;; (require 'ac-js2)
+;; (add-hook 'js2-mode-hook 'ac-js2-mode)
 
 (defun my-js-mode-config ()
   (setq indent-tabs-mode t
