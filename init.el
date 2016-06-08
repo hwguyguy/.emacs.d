@@ -638,7 +638,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (key-chord-define php-mode-map ",." 'my-php-object-operator-shortcut)
 (key-chord-define php-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
 (key-chord-define php-mode-map "<>" 'my-php-pseudo-variable-this-shortcut)
-(key-chord-define php-mode-map ";;" 'my-semicolon-close-statement-shortcut)
 
 (defun my-nxml-mode-config ()
   (setq indent-tabs-mode t
