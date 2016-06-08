@@ -271,6 +271,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         php-mode
         web-mode
         scss-mode
+        tss
         apache-mode
         nginx-mode
         yaml-mode
@@ -299,6 +300,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (desktop-save-mode 1)
 (add-to-list 'desktop-modes-not-to-save 'dired-mode)
+
+(global-subword-mode)
 
 (require 'undo-tree)
 (defun undo-in-term-mode ()
@@ -690,6 +693,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'scss-mode-hook 'emmet-mode)
 (add-hook 'scss-mode-hook 'rainbow-mode)
 (add-hook 'scss-mode-hook 'auto-complete-mode)
+
+(require 'typescript)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-hook 'typescript-mode 'auto-complete-mode)
 
 (defun my-sh-mode-config ()
   (setq indent-tabs-mode t
