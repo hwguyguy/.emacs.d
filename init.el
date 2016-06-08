@@ -264,7 +264,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         org
         clojure-mode
         clj-refactor
-        go-mode
         js2-mode
         ;; ac-js2
         ruby-end
