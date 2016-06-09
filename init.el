@@ -696,7 +696,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (require 'typescript)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-(add-hook 'typescript-mode 'auto-complete-mode)
+(add-hook 'typescript-mode-hook 'auto-complete-mode)
 
 (defun my-sh-mode-config ()
   (setq indent-tabs-mode t
