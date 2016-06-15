@@ -601,6 +601,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
 (defun my-js2-mode-config()
   (setq indent-tabs-mode t
         tab-width 4
@@ -661,7 +662,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 (defun my-web-mode-config()
   (setq indent-tabs-mode t
         tab-width 4))
@@ -682,6 +682,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (add-hook 'web-mode-hook 'rainbow-mode)
 (key-chord-define web-mode-map ",." 'my-php-object-operator-shortcut)
 (key-chord-define web-mode-map ",/" 'my-php-double-arrow-operator-shortcut)
+
+(require 'sgml-mode)
+;; XML offset for js2-jsx-mode
+(setq sgml-basic-offset 4)
 
 (defun my-css-mode-config()
   (setq tab-width 4))
