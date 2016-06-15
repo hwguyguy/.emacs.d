@@ -604,7 +604,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (defun my-js2-mode-config()
   (setq indent-tabs-mode t
         tab-width 4
-        js2-basic-offset 4)
+        js2-basic-offset 4
+        js2-pretty-multiline-declarations nil)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 (add-hook 'js2-mode-hook 'my-js2-mode-config)
 
