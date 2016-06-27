@@ -601,7 +601,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
 (defun my-js2-mode-config()
   (setq indent-tabs-mode t
         tab-width 4
@@ -616,7 +616,14 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (defun my-js-mode-config ()
   (setq indent-tabs-mode t
         tab-width 4
-        js-indent-level 4))
+        js-indent-level 4)
+  (let ((filename (buffer-file-name)))
+    (when (and filename
+               (string-match "package.json" filename))
+      (make-local-variable 'js-indent-level)
+      (setq indent-tabs-mode nil
+            tab-width 2
+            js-indent-level 2))))
 (add-hook 'js-mode-hook 'my-js-mode-config)
 
 (require 'ruby-end)
