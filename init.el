@@ -602,13 +602,17 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
+(setq js2-basic-offset 4
+      js2-pretty-multiline-declarations nil)
 (defun my-js2-mode-config()
   (setq indent-tabs-mode t
-        tab-width 4
-        js2-basic-offset 4
-        js2-pretty-multiline-declarations nil)
+        tab-width 4)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
 (add-hook 'js2-mode-hook 'my-js2-mode-config)
+(defun my-js2-jsx-mode-config ()
+  (make-local-variable 'js2-strict-trailing-comma-warning)
+  (setq js2-strict-trailing-comma-warning nil))
+(add-hook 'js2-jsx-mode-hook 'my-js2-jsx-mode-config)
 
 ;; (require 'ac-js2)
 ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
