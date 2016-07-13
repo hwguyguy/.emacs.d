@@ -607,7 +607,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
     (back-to-indentation)
     (when (nth 4 parse-status)
       (cl-return-from js2-proper-indentation (js2--comment-indent parse-status)))
-    (let* ((at-closing-bracket (looking-at "[]}]"))
+    (let* ((at-closing-bracket (looking-at "[]})]"))
            (backward-indent-p (looking-at ")"))
            (same-indent-p (or at-closing-bracket
                               (looking-at "\\_<case\\_>[^:]")
@@ -714,10 +714,11 @@ PROJECT-ROOT is the targeted directory.  If nil, use
            ;; same level as the opening statement. Same goes for
            ;; "case" and "default".
            ;;
-           ;; CHANGED: Closing paren should be indent at the the same
-           ;; level as the beginning of the opening statement, instead
-           ;; of the level of the opening paren.
-           (let ((same-indent-p (looking-at "[]}]"))
+           ;; CHANGED: In multi-lines if statement, closing paren
+           ;; should be indent at the the same level as the beginning
+           ;; of the opening statement, instead of the level of the
+           ;; opening paren.
+           (let ((same-indent-p (looking-at "[]})]"))
                  (backward-indent-p (looking-at ")"))
                  (switch-keyword-p (looking-at "default\\_>\\|case\\_>[^:]"))
                  (continued-expr-p (js--continued-expression-p)))
