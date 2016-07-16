@@ -714,7 +714,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
            ;; same level as the opening statement. Same goes for
            ;; "case" and "default".
            ;;
-           ;; CHANGED: In multi-lines if statement, closing paren
+           ;; CHANGED: In multi-lines "if" statement, closing paren
            ;; should be indent at the the same level as the beginning
            ;; of the opening statement, instead of the level of the
            ;; opening paren.
@@ -760,10 +760,13 @@ PROJECT-ROOT is the targeted directory.  If nil, use
           ((js--continued-expression-p)
            (+ js-indent-level js-expr-indent-offset))
           (t 0))))
+(setq js-indent-level 4
+      ;; Fixed spread operator indentation. NOTE: This is fixed in Emacs 25.1
+      js--indent-operator-re (concat "[-+*/%<>&^|?:.]\\([^-+*/.]\\|$\\)\\|!?=\\|"
+                                     (js--regexp-opt-symbol '("in" "instanceof"))))
 (defun my-js-mode-config ()
   (setq indent-tabs-mode t
-        tab-width 4
-        js-indent-level 4)
+        tab-width 4)
   (let ((filename (buffer-file-name)))
     (when (and filename
                (string-match "package.json" filename))
