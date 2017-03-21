@@ -2,6 +2,7 @@
 !/.gitignore
 !/.gitmodules
 /init.override.el
+/custom.el
 /elpa
 /ac-comphist.dat
 /auto-save-list

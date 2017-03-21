@@ -34,7 +34,8 @@
       mouse-autoselect-window t
       scroll-step 1
       scroll-conservatively 10000
-      auto-window-vscroll nil)
+      auto-window-vscroll nil
+      custom-file (concat user-emacs-directory "custom.el"))
 (setq-default indent-tabs-mode t
               tab-width 4
               c-basic-offset 4)
