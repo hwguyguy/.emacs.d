@@ -35,6 +35,7 @@
       scroll-step 1
       scroll-conservatively 10000
       auto-window-vscroll nil
+      ring-bell-function 'ignore
       custom-file (concat user-emacs-directory "custom.el"))
 (setq-default indent-tabs-mode t
               tab-width 4
