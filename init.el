@@ -268,6 +268,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
         clj-refactor
         js2-mode
         ;; ac-js2
+        rjsx-mode
         ruby-end
         rinari
         php-mode
@@ -777,6 +778,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
             tab-width 2
             js-indent-level 2))))
 (add-hook 'js-mode-hook 'my-js-mode-config)
+
+(require 'rjsx-mode)
+(add-to-list 'auto-mode-alist '("src\\/.*components\\/.*\\.js\\'" . rjsx-mode))
+(add-hook 'rjsx-mode-hook 'emmet-mode)
 
 (require 'ruby-end)
 (setq ruby-end-insert-newline nil)
