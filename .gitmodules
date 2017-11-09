@@ -1,3 +1,6 @@
-[submodule "evil-plugins"]
-	path = evil-plugins
+[submodule "packages/use-package"]
+	path = packages/use-package
+	url = https://github.com/jwiegley/use-package.git
+[submodule "packages/evil-plugins"]
+	path = packages/evil-plugins
 	url = https://github.com/tarao/evil-plugins.git

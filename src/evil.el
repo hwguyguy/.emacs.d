@@ -1,0 +1,21 @@
+(defun my-evil/translate-ctrl-h-to-del-in-insert-state (prompt)
+  (if (and (bound-and-true-p evil-mode)
+           (eq evil-state 'insert))
+      (kbd "DEL")
+    (kbd "C-h")))
+
+(defun my-evil/evil-jump-extra-match (orig-fun &rest args)
+  (interactive)
+  (condition-case err
+      (apply orig-fun args)
+    (error
+     (cond ((string-equal major-mode "nxml-mode")
+            (nxml-token-after)
+            (cond ((memq xmltok-type '(start-tag partial-start-tag))
+                   (nxml-up-element)
+                   (backward-sexp))
+                  ((memq xmltok-type '(end-tag partial-end-tag))
+                   (nxml-backward-up-element)
+                   (forward-sexp))))
+           ((string-equal major-mode "web-mode")
+            (web-mode-navigate))))))
