@@ -76,6 +76,7 @@
                          ("melpa" . "http://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
+(advice-add 'package-install :before 'my-package/package-install-refresh-contents-once)
 
 (add-to-list 'load-path (concat user-emacs-directory "packages/use-package"))
 (require 'use-package)
