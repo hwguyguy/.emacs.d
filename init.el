@@ -226,7 +226,22 @@
   :ensure t
   :config
   (setq company-minimum-prefix-length 1
-		company-idle-delay .2))
+		company-idle-delay .2
+        company-tooltip-align-annotations t)
+  (defun my-company-mode-config ()
+    (set-face-attribute 'company-tooltip nil
+                        :background "#eee8d5"
+                        :foreground "#93a1a1")
+    (set-face-attribute 'company-tooltip-selection nil
+                        :background "#93a1a1"
+                        :foreground "#eee8d5")
+    (set-face-attribute 'company-tooltip-common-selection nil
+                        :background "#93a1a1"
+                        :foreground "#eee8d5")
+    (set-face-attribute 'company-tooltip-annotation-selection nil
+                        :background "#93a1a1"
+                        :foreground "#eee8d5"))
+  (add-hook 'company-mode-hook 'my-company-mode-config))
 
 (use-package yasnippet
   :ensure t
@@ -664,7 +679,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
     (interactive)
     (tide-setup)
     (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled))
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
     (company-mode +1))
