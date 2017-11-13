@@ -130,9 +130,10 @@
   (delete 'term-mode evil-insert-state-modes)
   (add-to-list 'evil-emacs-state-modes 'term-mode)
   (evil-mode 1)
-  (advice-add 'evil-jump-item :around 'my-evil/evil-jump-extra-match)
-  (add-to-list 'load-path (concat user-emacs-directory "packages/evil-plugins"))
-  (require 'evil-little-word))
+  (advice-add 'evil-jump-item :around 'my-evil/evil-jump-extra-match))
+
+(use-package evil-little-word
+  :load-path "packages/evil-plugins")
 
 (use-package evil-numbers
   :ensure t)
@@ -226,7 +227,7 @@
   :ensure t
   :config
   (setq company-minimum-prefix-length 1
-		company-idle-delay .2
+        company-idle-delay .2
         company-tooltip-align-annotations t)
   (defun my-company-mode-config ()
     (set-face-attribute 'company-tooltip nil
@@ -395,6 +396,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (use-package org
   :ensure t
+  :pin org
   :mode ("\\.org\\'" . org-mode)
   :bind (:map org-mode-map
               ("M-h" . backward-kill-word))
