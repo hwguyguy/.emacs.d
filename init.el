@@ -138,6 +138,11 @@
 (use-package evil-numbers
   :ensure t)
 
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
 (use-package anzu
   :ensure t)
 
