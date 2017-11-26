@@ -521,7 +521,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (setq js2-basic-offset 4
         js2-pretty-multiline-declarations nil
         js2-strict-missing-semi-warning nil
-        js2-strict-trailing-comma-warning nil)
+        js2-strict-trailing-comma-warning nil
+        js2-strict-inconsistent-return-warning nil)
   (defun my-js2-mode-config()
     (setq indent-tabs-mode t
           tab-width 4)
