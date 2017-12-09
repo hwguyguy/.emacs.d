@@ -167,7 +167,8 @@
   :bind (:map helm-find-files-map
               ("RET" . my-helm/helm-find-files-expand-directory-or-open-file)
               ("<tab>" . my-helm/helm-find-files-expand-directory-or-open-file)
-              ("C-r" . my-helm/helm-find-files-insert-current-directory)
+              ("C-r" . my-helm/helm-find-files-insert-current-directory))
+  :bind (:map helm-buffer-map
               ("M-D" . my-helm/helm-buffer-run-kill-buffers-persistent))
   :config
   (require 'helm-config)
