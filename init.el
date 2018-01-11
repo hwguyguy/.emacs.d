@@ -317,10 +317,16 @@ PROJECT-ROOT is the targeted directory.  If nil, use
      ((projectile-locate-dominating-file project-root ".svn") 'svn)
      (t 'none)))
   (helm-projectile-on)
-  (projectile-global-mode))
+  (projectile-global-mode)
+  (unless (executable-find "fzf")
+    (define-key evil-normal-state-map " fp" 'helm-projectile-find-file)))
 
-;; (use-package fiplr
-;;   :ensure t)
+(use-package fzf
+  :ensure t
+  :if (executable-find "fzf")
+  :config
+  (setenv "FZF_DEFAULT_COMMAND" "ag --hidden --follow --nocolor --nogroup --skip-vcs-ignores -g \"\"")
+  (define-key evil-normal-state-map " fp" 'fzf))
 
 (use-package sr-speedbar
   :ensure t)
@@ -922,8 +928,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-normal-state-map " bb" 'helm-mini)
 (define-key evil-normal-state-map " ff" 'helm-find-files)
 (define-key evil-normal-state-map " be" 'ibuffer)
-(define-key evil-normal-state-map " fd" 'fiplr-find-file)
-(define-key evil-normal-state-map " fp" 'helm-projectile-find-file)
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-s") 'evil-numbers/dec-at-pt)
 
