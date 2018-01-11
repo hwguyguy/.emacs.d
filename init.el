@@ -335,6 +335,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   :ensure t
   :if (not (eq system-type 'windows-nt))
   :bind (:map term-raw-map
+              ("M-p" . previous-line)
+              ("C-p" . term-send-up)
+              ("M-n" . next-line)
+              ("C-n" . term-send-down)
               ("M-x" . helm-M-x))
   :config
   (setq multi-term-program nil
