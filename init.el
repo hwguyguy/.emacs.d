@@ -335,16 +335,20 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   :ensure t
   :if (not (eq system-type 'windows-nt))
   :bind (:map term-raw-map
-              ("M-p" . previous-line)
-              ("C-p" . term-send-up)
-              ("M-n" . next-line)
-              ("C-n" . term-send-down)
               ("M-x" . helm-M-x))
   :config
   (setq multi-term-program nil
         multi-term-switch-after-close nil)
   (delete "C-h" term-unbind-key-list)
-  (setq term-bind-key-alist (append '(("M-h" . my-term/term-send-backward-kill-word)
+  (cl-delete "M-p" term-bind-key-alist :test 'equal :key 'car)
+  (cl-delete "M-n" term-bind-key-alist :test 'equal :key 'car)
+  (cl-delete "C-p" term-bind-key-alist :test 'equal :key 'car)
+  (cl-delete "C-n" term-bind-key-alist :test 'equal :key 'car)
+  (setq term-bind-key-alist (append '(("M-p" . previous-line)
+                                      ("C-p" . term-send-up)
+                                      ("M-n" . next-line)
+                                      ("C-n" . term-send-down)
+                                      ("M-h" . my-term/term-send-backward-kill-word)
                                       ("M-DEL" . my-term/term-send-backward-kill-word)
                                       ("M-d" . term-send-forward-kill-word)
                                       ("C-z" . my-term/term-send-ctrl-z)
