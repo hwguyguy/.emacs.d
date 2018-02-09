@@ -232,9 +232,15 @@
 (use-package company
   :ensure t
   :config
+  (require 'company-simple-complete)
   (setq company-minimum-prefix-length 1
         company-idle-delay .2
         company-tooltip-align-annotations t)
+  (define-key company-active-map (kbd "TAB") 'company-complete-selection)
+  (define-key company-active-map (kbd "M-n") 'company-simple-complete-next)
+  (define-key company-active-map (kbd "M-p") 'company-simple-complete-previous)
+  (define-key company-active-map (kbd "RET") nil)
+  (define-key company-active-map [return] nil)
   (defun my-company-mode-config ()
     (set-face-attribute 'company-tooltip nil
                         :background "#eee8d5"
