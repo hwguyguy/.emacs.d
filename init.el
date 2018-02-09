@@ -104,6 +104,8 @@
   :ensure t
   :if (memq window-system '(mac ns x))
   :config
+  (push "GOROOT" exec-path-from-shell-variables)
+  (push "GOPATH" exec-path-from-shell-variables)
   (exec-path-from-shell-initialize))
 
 (use-package undo-tree
@@ -205,9 +207,30 @@
 (use-package auto-complete
   :ensure t
   :config
+  (let* ((gopath (or (getenv "GOPATH")
+                     (substitute-in-file-name "$HOME/go")))
+         (gocode-path (concat gopath "/src/github.com/nsf/gocode")))
+    (when (and (file-directory-p gopath)
+               (file-directory-p gocode-path))
+           (add-to-list 'load-path (concat gocode-path "/emacs"))
+           (require 'go-autocomplete)))
   (require 'auto-complete-config)
+  (setq-default ac-sources '(ac-source-filename
+                             ac-source-files-in-current-dir
+                             ac-source-abbrev
+                             ac-source-dictionary
+                             ac-source-words-in-same-mode-buffers
+                             ac-source-yasnippet))
+  (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
+  (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+  (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
+  (add-hook 'css-mode-hook 'ac-css-mode-setup)
+  (add-hook 'auto-complete-mode-hook 'ac-common-setup)
   (defun ac-expand-common ())
-  (ac-config-default)
+  (setq ac-auto-start 1
+        ac-delay 0.1
+        ac-auto-show-menu 0.1
+        ac-disable-faces nil)
   (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
   (define-key ac-completing-map "\t" 'ac-complete)
   (define-key ac-completing-map [tab] 'ac-complete)
@@ -217,17 +240,7 @@
   (define-key ac-completing-map "\M-p" nil)
   (define-key ac-completing-map (kbd "M-n") 'ac-expand)
   (define-key ac-completing-map (kbd "M-p") 'ac-expand-previous)
-  (define-key ac-completing-map (kbd "C-s") 'ac-isearch)
-  (setq ac-auto-start 1
-        ac-delay 0.1
-        ac-auto-show-menu 0.1
-        ac-disable-faces nil)
-  (setq-default ac-sources
-                (append '(ac-source-filename
-                          ac-source-files-in-current-dir)
-                        ac-sources
-                        '(ac-source-yasnippet)))
-  (global-auto-complete-mode t))
+  (define-key ac-completing-map (kbd "C-s") 'ac-isearch))
 
 (use-package company
   :ensure t
@@ -380,7 +393,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
     (setq indent-tabs-mode nil))
   (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-config)
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'auto-complete-mode))
 
 (use-package cc-mode
   :bind (:map c-mode-base-map
@@ -661,6 +675,31 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   :config
   (add-hook 'rjsx-mode-hook 'emmet-mode))
 
+(use-package typescript-mode
+  :ensure t
+  :mode "\\.ts\\'"
+  :config
+  (add-hook 'typescript-mode-hook 'company-mode))
+
+(use-package tide
+  :ensure t
+  :config
+  (defun my-tide-mode-config ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (company-mode +1))
+  (add-hook 'typescript-mode-hook #'my-tide-mode-config))
+
+(use-package go-mode
+  :ensure t
+  :config
+  (add-hook 'go-mode-hook 'flycheck-mode)
+  (add-hook 'go-mode-hook 'auto-complete-mode))
+
 (use-package ruby-mode
   :config
   (add-hook 'ruby-mode-hook 'flycheck-mode))
@@ -669,11 +708,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   :ensure t
   :config
   (setq ruby-end-insert-newline nil))
-
-(use-package rinari
-  :ensure t
-  :config
-  (global-rinari-mode 1))
 
 (use-package php-mode
   :ensure t
@@ -694,25 +728,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (key-chord-define php-mode-map ",." 'my-php/insert-object-operator)
   (key-chord-define php-mode-map ",/" 'my-php/insert-double-arrow-operator)
   (key-chord-define php-mode-map "<>" 'my-php/insert-pseudo-variable-this))
-
-(use-package typescript-mode
-  :ensure t
-  :mode "\\.ts\\'"
-  :config
-  (add-hook 'typescript-mode-hook 'company-mode))
-
-(use-package tide
-  :ensure t
-  :config
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    (company-mode +1))
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
 (use-package web-mode
   :ensure t
