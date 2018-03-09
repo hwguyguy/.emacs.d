@@ -78,8 +78,9 @@
 (package-initialize)
 (advice-add 'package-install :before 'my-package/package-install-refresh-contents-once)
 
-(add-to-list 'load-path (concat user-emacs-directory "packages/use-package"))
-(require 'use-package)
+(unless (require 'use-package nil 'noerror)
+  (package-install 'use-package)
+  (require 'use-package))
 
 (use-package diminish
   :ensure t)
@@ -290,7 +291,7 @@
   (add-hook 'snippet-mode-hook 'whitespace-mode))
 
 (use-package bookmark+
-  :ensure t
+  :load-path "packages/bookmark-plus"
   :init
   (setq bookmark-default-file (concat user-emacs-directory "bookmarks"))
   :config
