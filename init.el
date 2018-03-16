@@ -569,16 +569,12 @@ PROJECT-ROOT is the targeted directory.  If nil, use
           tab-width 4)
     (add-to-list 'write-file-functions 'delete-trailing-whitespace))
   (add-hook 'js2-mode-hook 'my-js2-mode-config)
+  (add-hook 'js2-mode-hook 'flycheck-mode)
   ;; (defun my-js2-jsx-mode-config ()
   ;;   (make-local-variable 'js2-strict-trailing-comma-warning)
   ;;   (setq js2-strict-trailing-comma-warning nil))
   ;; (add-hook 'js2-jsx-mode-hook 'my-js2-jsx-mode-config)
   )
-
-;; (use-package ac-js2
-;;   :ensure t
-;;   :config
-;;   (add-hook 'js2-mode-hook 'ac-js2-mode))
 
 (use-package js
   :config
