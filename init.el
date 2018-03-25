@@ -379,7 +379,10 @@ PROJECT-ROOT is the targeted directory.  If nil, use
                                     term-bind-key-alist)))
 
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :config
+  (when (executable-find "eslint_d")
+    (setq flycheck-javascript-eslint-executable "eslint_d")))
 
 (use-package rainbow-mode
   :ensure t
@@ -487,7 +490,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (use-package js2-mode
   :ensure t
-  :mode "\\.js\\'"
+  ;; :mode "\\.js\\'"
   :config
   ;; Override js2-mode indentation function
   (cl-defun js2-proper-indentation (parse-status)
@@ -569,7 +572,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
           tab-width 4)
     (add-to-list 'write-file-functions 'delete-trailing-whitespace))
   (add-hook 'js2-mode-hook 'my-js2-mode-config)
-  (add-hook 'js2-mode-hook 'flycheck-mode)
   ;; (defun my-js2-jsx-mode-config ()
   ;;   (make-local-variable 'js2-strict-trailing-comma-warning)
   ;;   (setq js2-strict-trailing-comma-warning nil))
@@ -664,7 +666,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
         (setq indent-tabs-mode nil
               tab-width 2
               js-indent-level 2))))
-  (add-hook 'js-mode-hook 'my-js-mode-config))
+  (add-hook 'js-mode-hook 'my-js-mode-config)
+  (add-hook 'js-mode-hook 'flycheck-mode))
 
 (use-package rjsx-mode
   :ensure t
