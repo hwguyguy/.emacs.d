@@ -951,6 +951,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 (define-key evil-insert-state-map (kbd "M-SPC") 'evil-normal-state)
+(define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line)
 (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
 (define-key evil-insert-state-map (kbd "C-n") 'next-line)
 (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
