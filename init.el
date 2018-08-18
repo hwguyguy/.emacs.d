@@ -455,22 +455,6 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (add-hook 'org-mode-hook 'auto-complete-mode)
   (add-hook 'org-mode-hook 'rainbow-mode))
 
-(use-package clojure-mode
-  :ensure t
-  :mode "\\.clj\\'"
-  :mode ("\\.cljs\\'" . clojurescript-mode)
-  :config
-  (defun my-clojure-mode-config()
-    (setq indent-tabs-mode nil))
-  (add-hook 'clojure-mode-hook 'my-clojure-mode-config)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'clj-refactor-mode))
-
-(use-package clj-refactor
-  :ensure t
-  :config
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
-
 (use-package emmet-mode
   :ensure t
   :diminish (emmet-mode . "Em")
