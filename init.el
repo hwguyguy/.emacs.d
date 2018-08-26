@@ -584,7 +584,8 @@ PROJECT-ROOT is the targeted directory.  If nil, use
                     (>= (point) beg)
                     (js--array-comp-indentation bracket beg))))
             ((js--ctrl-statement-indentation))
-            ((js--multi-line-declaration-indentation))
+            ;; CHANGED: Make multi-lines declaration use tabs only
+            ;; ((js--multi-line-declaration-indentation))
             ((nth 1 parse-status)
              ;; A single closing paren/bracket should be indented at the
              ;; same level as the opening statement. Same goes for
