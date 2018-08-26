@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: public function __construct()
-# key: cf
-# --
-public function __construct($1) {
-	$0
-}

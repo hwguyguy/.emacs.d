@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: class with constructor
+# key: cc
+# --
+class $1 {
+	public function __construct($2) {
+		$0
+	}
+}
