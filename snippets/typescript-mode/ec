@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: export class
+# key: ec
+# --
+export class $1 {
+	$0
+}

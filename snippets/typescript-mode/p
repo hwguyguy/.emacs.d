@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: protected method
+# key: p
+# --
+protected $1($2)$3 {
+	$0
+}

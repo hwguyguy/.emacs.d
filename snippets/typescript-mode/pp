@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: private method
+# key: pp
+# --
+private $1($2)$3 {
+	$0
+}

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: export class with constructor
+# key: ecc
+# --
+export class $1 {
+	constructor($2) {
+		$0
+	}
+}
