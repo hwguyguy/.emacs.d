@@ -716,15 +716,12 @@ PROJECT-ROOT is the targeted directory.  If nil, use
 
 (use-package web-mode
   :ensure t
+  :mode "\\.erb\\'"
+  :mode "\\.html?\\'"
+  :mode "\\.ejs\\'"
   :mode "\\.phtml\\'"
   :mode ".*\/views\/.*\\.php\\'"
   :mode "\\.tpl\\.php\\'"
-  :mode "\\.jsp\\'"
-  :mode "\\.as[cp]x\\'"
-  :mode "\\.erb\\'"
-  :mode "\\.mustache\\'"
-  :mode "\\.djhtml\\'"
-  :mode "\\.html?\\'"
   :config
   (defun my-web-mode-config()
     (setq indent-tabs-mode t
