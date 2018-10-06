@@ -815,6 +815,11 @@ PROJECT-ROOT is the targeted directory.  If nil, use
   (interactive)
   (clipboard-kill-ring-save (point-min) (point-max)))
 
+(defun indent-buffer ()
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+
 (defun pwd-yank ()
   "Put the current file name on the clipboard"
   (interactive)
