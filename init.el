@@ -710,6 +710,7 @@ PROJECT-ROOT is the targeted directory.  If nil, use
     (c-set-style "hwguyguy-php"))
   (add-hook 'php-mode-hook 'my-php-mode-config)
   (add-hook 'php-mode-hook 'flycheck-mode)
+  (add-hook 'php-mode-hook 'auto-complete-mode)
   (key-chord-define php-mode-map ",." 'my-php/insert-object-operator)
   (key-chord-define php-mode-map ",/" 'my-php/insert-double-arrow-operator)
   (key-chord-define php-mode-map "<>" 'my-php/insert-pseudo-variable-this))
