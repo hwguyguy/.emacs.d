@@ -177,6 +177,7 @@
   (require 'helm-config)
   (setq helm-M-x-fuzzy-match t
         helm-buffers-fuzzy-matching t
+        helm-recentf-fuzzy-match t
         helm-imenu-fuzzy-match t
         helm-ff-newfile-prompt-p nil)
   (helm-mode 1)
