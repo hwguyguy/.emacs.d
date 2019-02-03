@@ -19,3 +19,8 @@
                    (forward-sexp))))
            ((string-equal major-mode "web-mode")
             (web-mode-navigate))))))
+
+(defun my-evil/evil-paste-after-from-0 ()
+  (interactive)
+  (let ((evil-this-register ?0))
+    (call-interactively 'evil-paste-after)))

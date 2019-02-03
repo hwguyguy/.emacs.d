@@ -948,6 +948,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key evil-normal-state-map " be" 'ibuffer)
 (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "C-s") 'evil-numbers/dec-at-pt)
+(define-key evil-normal-state-map (kbd "C-x C-p") 'my-evil/evil-paste-after-from-0)
 
 (define-key evil-visual-state-map (kbd "C-g") 'evil-exit-visual-state)
 (define-key evil-visual-state-map (kbd "M-SPC") 'evil-exit-visual-state)
